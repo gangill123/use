@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Init.mapper.AttendanceMapper">
+	<!-- 모든 시간 정보 조회 -->
+	<select id="getAllCheckTime"
+		resultType="com.Init.domain.AttendanceVO">
+		SELECT a.*, e.emp_id
+		FROM attendance_ch a
+		JOIN employee e ON a.emp_id = e.emp_id
+		WHERE a.emp_id = #{emp_id}
+	</select>
+
+	<!-- 출근 기록 -->
+	<insert id="recordCheckIn" parameterType="String">
+		INSERT INTO attendance_ch (emp_id, check_in)
+		VALUES (#{emp_id}, NOW());
+	</insert>
+
+	<!-- 퇴근시간 -->
+	<update id="recordCheckout" parameterType="String">
+		UPDATE attendance_ch
+		SET check_out = NOW()
+		WHERE emp_id = #{emp_id}
+		AND check_in = (
+			SELECT check_in
+			FROM (
+				SELECT check_in
+				FROM attendance_ch
+				WHERE emp_id = #{emp_id}
+				AND check_in IS NOT NULL
+				ORDER BY check_in DESC
+				LIMIT 1
+			) AS latest
+		)
+		LIMIT 1;
+	</update>
+
+	<!-- 최근 출근 확인 -->
+	<select id="fetchLatestAttendanceRecord" parameterType="String"
+		resultType="com.Init.domain.AttendanceVO">
+		SELECT check_in
+		FROM attendance_ch
+		WHERE emp_id = #{emp_id}
+		AND check_in IS NOT NULL
+		ORDER BY check_in DESC
+		LIMIT 1
+	</select>
+
+	<!-- 최근 퇴근한 시간 조회 -->
+	<select id="fetchLatestCheckOutRecord" parameterType="String"
+		resultType="com.Init.domain.AttendanceVO">
+		SELECT check_in, check_out
+		FROM attendance_ch
+		WHERE emp_id = #{emp_id}
+		ORDER BY check_in DESC
+		LIMIT 1
+	</select>
+
+	<!-- 근무 시간 계산 및 업데이트 -->
+	<update id="calculateAndUpdateWorkingTime"
+		parameterType="String">
+		UPDATE attendance_ch
+		SET working_time = TIMESTAMPDIFF(MINUTE, check_in, check_out)
+		WHERE emp_id = #{emp_id}
+		AND check_out IS NOT NULL; <!-- 퇴근 시간이 존재하는 경우만 업데이트 -->
+	</update>
+
+	<select id="getWorkingTime" resultType="double">
+		SELECT working_time
+		FROM attendance_ch
+		WHERE emp_id = #{emp_id}
+		AND check_out IS NOT NULL
+		ORDER BY check_in DESC
+		LIMIT 1;
+	</select>
+
+	<select id="getAllCheckTimeWithPaging" parameterType="map"
+		resultType="com.Init.domain.AttendanceVO">
+		SELECT a.*, e.emp_id
+		FROM attendance_ch a
+		JOIN employee e ON a.emp_id = e.emp_id
+		WHERE a.emp_id = #{emp_id}
+		ORDER BY check_in DESC
+		LIMIT #{size} OFFSET #{offset}
+	</select>
+
+	<select id="getTotalCheckTimeCount" parameterType="string"
+		resultType="int">
+		SELECT COUNT(*) 
+		FROM attendance_ch
+		WHERE emp_id = #{emp_id}
+	</select>
+
+	<!-- 근태 기록 업데이트 -->
+	<update id="updateAttendanceRecord"
+		parameterType="com.Init.domain.AttendanceVO">
+		UPDATE attendance_ch
+		SET
+			emp_id = #{emp_id},
+			check_in = #{check_in},
+			check_out = #{check_out},
+			WorkingOutside_time = #{WorkingOutside_time},  <!-- 변수명 일관성 유지 -->
+			return_time = #{return_time},
+			status = #{status},
+			overtime = #{overtime},
+			new_check_in = #{new_check_in},
+			new_check_out = #{new_check_out},
+			new_WorkingOutside_time = #{new_WorkingOutside_time}, <!-- 변수명 일관성 유지 -->
+			working_time = #{working_time},
+			night_work_time = #{night_work_time},
+			special_working_time = #{special_working_time},
+			modified_reason = #{modified_reason},
+			modified_time = #{modified_time},
+			modified_person = #{modified_person},
+			workform_status = #{workform_status}
+		WHERE attendance_id = #{attendance_id}
+	</update>
+
+	<delete id="deleteAttendance" parameterType="int">
+		DELETE FROM attendance_ch
+		WHERE attendance_id = #{attendance_id}
+	</delete>
+
+	<select id="selectRecentAttendanceRecords" resultType="com.Init.domain.AttendanceVO">
+		SELECT check_in, check_out, workform_status
+		FROM attendance_ch
+		WHERE emp_id = #{emp_id}
+		ORDER BY check_in DESC
+		LIMIT 7
+	</select>
+
+	<insert id="insertOvertime" parameterType="com.Init.domain.AttendanceVO">
+		INSERT INTO attendance_ch (emp_id, created_at, check_in, check_out, overtime, status, modified_reason)
+		VALUES (#{emp_id}, #{created_at}, #{check_in}, #{check_out}, #{overtime}, #{status}, #{modified_reason})
+	</insert>
+	
+	  <!-- 외출 시간 업데이트 쿼리 -->
+    <update id="updateWorkingOutsideTime" parameterType="com.Init.domain.AttendanceVO">
+        UPDATE attendance_ch
+        SET workingOutside_time = #{WorkingOutside_time}
+        WHERE emp_id = #{emp_id} AND attendance_id = #{attendance_id}
+    </update>
+
+    <!-- 복귀 시간 업데이트 쿼리 -->
+    <update id="updateReturnTime" parameterType="com.Init.domain.AttendanceVO">
+        UPDATE attendance_ch
+        SET return_time = #{return_time}
+        WHERE emp_id = #{emp_id} AND attendance_id = #{attendance_id}
+    </update>
+	
+	
+	
+	
+	
+	
+</mapper>

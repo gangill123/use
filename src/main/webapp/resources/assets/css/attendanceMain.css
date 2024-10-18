@@ -1,0 +1,27 @@
+.info-card {
+    width: 400px; /* 사원 정보 카드의 너비 조정 */
+    margin-left: 90px;
+}
+
+  .attendance-table-container {
+        width: 70%; /* 테이블의 너비를 70%로 설정 (조정 가능) */
+        
+        margin-right: 50px; /* 오른쪽 여백 자동 */
+        margin-top: 20px; /* 상단 여백 추가 */
+        float: right; /* 왼쪽으로 이동 */
+        
+    
+      overflow: hidden; /* 내용이 넘칠 경우 처리 */
+    }
+
+    table {
+        width: 100%; /* 테이블 너비를 100%로 설정 */
+    }
+
+.btn1 {
+    padding: 40px 130px; /* 상하 좌우 여백을 조정하여 버튼 크기 증가 */
+    font-size: 16px; /* 폰트 크기를 크게 설정 */
+    border-radius: 5px; /* 모서리를 둥글게 설정 (선택 사항) */
+    margin-left:  90px;
+    margin-bottom: 90px;
+}
