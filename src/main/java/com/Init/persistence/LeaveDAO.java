@@ -6,9 +6,6 @@ import org.apache.ibatis.annotations.Param;
 
 import com.Init.domain.LeaveVO;
 
-/*
- *  tbl_member 테이블의 데이터를 활용하는 동작을 정의
- */
 
 public interface LeaveDAO {
 
@@ -34,4 +31,8 @@ public interface LeaveDAO {
 	void updateLeaveA(LeaveVO leave);
 
 	void insertLeaveRequestA(LeaveVO leaveVO);
+
+	List<LeaveVO> findLeaveByEmpId(String emp_id);
+	
+	
 }

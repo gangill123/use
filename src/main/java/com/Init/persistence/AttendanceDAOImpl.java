@@ -48,13 +48,7 @@ public class AttendanceDAOImpl implements AttendanceDAO {
 	public void checkIn(String emp_id) {
 		sqlSession.insert(NAMESPACE + ".checkIn", emp_id);
 	}
-//
-//	    @Override
-//	    public void checkOut(AttendanceVO attendance) {
-//	        sqlSession.insert(NAMESPACE + ".checkOut", attendance);
-//	    }
 
-	// 출근 체크했으면 한번더 체크하면 퇴근
 
 	@Override
 	public boolean checkIfCheckedIn(String emp_id) {
@@ -157,5 +151,13 @@ public class AttendanceDAOImpl implements AttendanceDAO {
     public int updateReturnTime(AttendanceVO attendanceVO) {
         return sqlSession.update(NAMESPACE+".updateReturnTime", attendanceVO);
     }
-	
+    @Override
+    public List<AttendanceVO> getAttendanceByEmpId(String emp_id
+    		) {
+        return sqlSession.selectList(NAMESPACE+".getAttendanceByEmpId", emp_id);
+    }
+    @Override
+    public void updateAttendanceA(AttendanceVO attendanceVO) {
+        sqlSession.update(NAMESPACE+".updateAttendanceA", attendanceVO);
+    }
 }

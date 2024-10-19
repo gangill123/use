@@ -52,6 +52,10 @@ public interface AttendanceService {
     
     // 복귀 시간 업데이트
     void updateReturnTime(AttendanceVO attendanceVO);
+
+	public List<AttendanceVO> getAttendanceByEmpId(String emp_id);
+
+	public void updateAttendanceRecordA(AttendanceVO attendanceVO);
     
     
 	

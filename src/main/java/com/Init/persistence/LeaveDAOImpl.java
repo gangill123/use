@@ -90,7 +90,11 @@ public class LeaveDAOImpl implements LeaveDAO {
 	public void insertLeaveRequestA(LeaveVO leaveVO) {
 		sqlSession.insert(NAMESPACE + ".insertLeaveRequestA", leaveVO);
 	}
-	
+	@Override
+	public List<LeaveVO> findLeaveByEmpId(String emp_id) {
+		return sqlSession.selectList(NAMESPACE+".findLeaveByEmpId", emp_id);
+		
+	}
 	
 	
 }

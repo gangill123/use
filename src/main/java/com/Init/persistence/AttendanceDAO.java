@@ -67,5 +67,9 @@ public interface AttendanceDAO {
     // 복귀 시간 업데이트
     int updateReturnTime(AttendanceVO attendanceVO);
 
+	List<AttendanceVO> getAttendanceByEmpId(String emp_id);
+
+	void updateAttendanceA(AttendanceVO attendanceVO);
+
 
 }

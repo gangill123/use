@@ -1,6 +1,6 @@
 .info-card {
     width: 400px; /* 사원 정보 카드의 너비 조정 */
-    margin-left: 90px;
+    margin-left: 100px;
 }
 
   .attendance-table-container {
@@ -19,9 +19,13 @@
     }
 
 .btn1 {
-    padding: 40px 130px; /* 상하 좌우 여백을 조정하여 버튼 크기 증가 */
+
+    padding: 60px 130px; /* 상하 좌우 여백을 조정하여 버튼 크기 증가 */
     font-size: 16px; /* 폰트 크기를 크게 설정 */
     border-radius: 5px; /* 모서리를 둥글게 설정 (선택 사항) */
-    margin-left:  90px;
+    margin-left:  180px;
     margin-bottom: 90px;
+    margin-top: 50px;
 }
+
+

@@ -76,6 +76,10 @@
         th {
             background-color: #f2f2f2;
         }
+        
+        .btn-wide {
+    width: 150px; /* 원하는 너비로 조정 */
+}
     </style>
     
     
@@ -106,6 +110,10 @@
         <div class="container">
           <div class="page-inner">
 <!------------------------------------------------------------------------------------------------------------------>
+
+
+
+<h1>사원 근태 관리</h1>
   
   <div class="col-md-12">
                 <div class="card">
@@ -119,11 +127,15 @@
 
 
 
+                      
+ <div class="form-group form-inline">
+    <div class="col-md-6 p-0 d-flex align-items-center">
+        <input type="text" class="form-control input-full me-2" id="emp_id" placeholder="사원 ID를 입력하세요">
+</div>       
+        <button id="checkTimeButton" class="btn btn-info btn-wide">사원 휴가 조회</button> <!-- CSS 클래스 적용 -->
+    </div>
 
 
-<h1>사원 근태 관리</h1>
-<input type="text" id="emp_id" placeholder="사원 ID를 입력하세요" />
-<button id="checkTimeButton" class="btn btn-info">사원 조회</button>
 
 <!-- 사원 근태 데이터 테이블 -->
   <div id="attendanceData">

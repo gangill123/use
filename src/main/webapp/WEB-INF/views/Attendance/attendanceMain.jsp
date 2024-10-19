@@ -16,9 +16,9 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     
-    
-      <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+     
+       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
       
@@ -91,35 +91,20 @@
 
 
 
-				<button class="btn1 btn-primary">
-					<span class="btn-label"> <i class="fa fa-bookmark"></i>
-					</span> 나의 근무 현황
-				</button>
-
-				<button class="btn1 btn-primary" data-toggle="modal"
-					data-target="#overtimeModal">
-					<span class="btn-label"> <i class="fa fa-bookmark"></i>
-					</span> 초과 근무 신청서
-				</button>
-
-				<button class="btn1 btn-primary">
-					<span class="btn-label"> <i class="fa fa-bookmark"></i>
-					</span> 교육/출장 신청서
-				</button>
-
-					<button class="btn1 btn-primary">
-                        <span class="btn-label">
-                          <i class="fa fa-bookmark"></i>
-                        </span>
-                       근태 수정 신청서
-                      </button>
-                
+				
+               
   
   
 <!-- JSP 파일에서 세션 값을 가져오는 부분 --> 
 <% String empId = (String) session.getAttribute("emp_id"); %>
 
 
+
+<button class="btn1 btn-primary" data-toggle="modal"
+	data-target="#overtimeModal">
+	<span class="btn-label"> <i class="fa fa-bookmark"></i>
+	</span> 초과 근무 신청서
+</button>
 
 
 <!-- 모달 초과 근무 신청서 -->
@@ -138,6 +123,14 @@
                         <label for="emp_id">사원 ID</label>
                         <input type="text" class="form-control" id="emp_id" name="emp_id" value="<%= empId %>" readonly>
             			</div>
+            			      <div class="form-group">
+                        <label for="workform_status">근태 상태</label>
+                        <select class="form-control" id="workform_status" name="workform_status" required>
+                            <option value="초과근무">초과근무</option>
+                        </select>
+                    </div>
+            			
+            			
 					<div class="form-group">
 						<label for="created_at">신청 날짜 및 시간:</label> <input
 							type="text" class="form-control" id="created_at"
@@ -219,6 +212,301 @@ function submitOvertimeForm() {
     });
 }
 </script>
+  
+ <!-- 근태 신청 현황 버튼 -->
+<button type="button" class="btn1 btn-primary" onclick="openAttendanceModal()">
+    <span class="btn-label">
+        <i class="fa fa-bookmark"></i>
+    </span> 근태 신청 현황
+</button>
+
+<!-- 나의 근태 신청 현황 모달 -->
+<div class="modal fade" id="attendanceModal" tabindex="-1" role="dialog" aria-labelledby="attendanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="attendanceModalLabel">나의 근태 신청 현황</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>출근번호</th>
+                                <th>사원 번호</th>
+                                <th>출근 시간</th>
+                                <th>퇴근 시간</th>
+                                <th>수정 요청 출근 시간</th>
+                                <th>수정 요청 퇴근 시간</th>
+                                <th>근무 상태</th>
+                                <th>초과 시간</th>
+                                <th>신청일</th>
+                                <th>야근 시간</th>
+                                <th>특근 시간</th>
+                                <th>수정 요청 이유</th>
+                                <th>상태</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceInfoTableBody">
+                            <!-- AJAX로 불러온 정보를 여기에 표시합니다 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeAttendanceModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 모달 닫기 함수
+function closeAttendanceModal() {
+    $('#attendanceModal').modal('hide'); // 모달 닫기
+}
+
+// AJAX 요청을 통해 근태 신청 현황을 가져오는 함수
+function openAttendanceModal() {
+    const empId = '<%= session.getAttribute("emp_id") %>'; // 세션에서 emp_id 가져오기
+    console.log("empId:", empId); // empId 값 확인
+
+    // AJAX 요청
+    $.ajax({
+        type: "GET",
+        url: "attendanceDataA", // 서버의 엔드포인트 설정
+        data: { emp_id: empId },
+        dataType: "json", // 응답 형식 지정
+        success: function(response) {
+            displayAttendanceInfo(response);
+            $('#attendanceModal').modal('show'); // 모달 열기
+        },
+        error: function(xhr, status, error) {
+            console.error("근태 신청 현황 조회 실패:", error);
+            $('#attendanceInfoTableBody').html("<tr><td colspan='14'>근태 신청 현황을 불러오는 데 실패했습니다.</td></tr>");
+        }
+    });
+}
+
+// 근태 정보를 화면에 표시하는 함수
+function displayAttendanceInfo(data) {
+    const attendanceInfoTableBody = document.getElementById("attendanceInfoTableBody");
+    attendanceInfoTableBody.innerHTML = ""; // 기존 데이터 초기화
+    
+    data.forEach(attendance => {
+        attendanceInfoTableBody.innerHTML +=
+            "<tr>" +
+            "<td>" + attendance.attendance_id + "</td>" +
+            "<td>" + attendance.emp_id + "</td>" +
+            "<td>" + attendance.check_in + "</td>" +
+            "<td>" + attendance.check_out + "</td>" +
+            "<td>" + attendance.new_check_in + "</td>" +
+            "<td>" + attendance.new_check_out + "</td>" +
+            "<td>" + attendance.workform_status + "</td>" +
+            "<td>" + attendance.overtime + "</td>" +
+            "<td>" + attendance.created_at + "</td>" +
+            "<td>" + attendance.night_work_time + "</td>" +
+            "<td>" + attendance.special_working_time + "</td>" +
+            "<td>" + attendance.modified_reason + "</td>" +
+            "<td>" + attendance.status + "</td>" +
+            "</tr>";
+    });
+}
+</script>
+
+</script>
+				
+				
+				
+<!-- 모달 버튼 -->
+<button class="btn1 btn-primary" data-toggle="modal" data-target="#updateModal">
+    <span class="btn-label">
+        <i class="fa fa-bookmark"></i>
+    </span>
+    근태 수정 신청서
+</button>
+
+
+
+<!-- 근태 수정 신청서 모달 -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">근태 수정 신청서</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="attendanceForm">
+                    <div class="form-group">
+                        <label for="attendance_id">근태 번호</label>
+                        <input type="text" class="form-control" id="attendance_id" name="attendance_id" placeholder="수정하고싶은 해당 날짜의 근태번호를 입력해주세요." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emp_id">사원 ID</label>
+                        <input type="text" class="form-control" id="emp_id" name="emp_id" value="<%= empId %>" readonly>
+                    </div>
+					            <div class="form-group">
+							    <label for="check_in_time">출근 시간</label>
+							    <input type="text" class="form-control" id="check_in_time" name="check_in" required>
+							</div>
+							<div class="form-group">
+							    <label for="check_out_time">퇴근 시간</label>
+							    <input type="text" class="form-control" id="check_out_time" name="check_out" required>
+							</div>
+                    <div class="form-group">
+                        <label for="new_check_in">수정할 출근 시간</label>
+                        <input type="text" class="form-control" id="new_check_in" placeholder="yyyy-MM-dd HH:mm:ss" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_check_out">수정할 퇴근 시간</label>
+                        <input type="text" class="form-control" id="new_check_out" placeholder="yyyy-MM-dd HH:mm:ss" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_WorkingOutside_time">수정할 외근 시간</label>
+                        <input type="text" class="form-control" id="new_WorkingOutside_time" placeholder="yyyy-MM-dd HH:mm:ss">
+                    </div>
+                    <div class="form-group">
+                        <label for="created_at">신청 날짜 및 시간:</label>
+                        <input type="text" class="form-control" id="created_at_time" placeholder="yyyy-MM-dd HH:mm:ss" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modified_reason">신청 이유</label>
+                        <textarea class="form-control" id="modified_reasonA" rows="3" placeholder="신청 이유를 입력하세요." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">상태</label>
+                        <select class="form-control" id="status" name="status" required>
+                            <option>진행 중</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submitAttendanceForm2()">신청</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('#updateModal').on('show.bs.modal', function (event) {
+        // 모달 오픈 시 필드 초기화
+        $('#check_in').val(''); // 출근 시간 초기화
+        $('#check_out').val(''); // 퇴근 시간 초기화
+    });
+});
+
+
+
+
+
+
+function submitAttendanceForm2() {
+    // 필드 값 초기화 및 명확한 변수명 사용
+    const attendanceId = $('#attendance_id').val(); // 사용자가 입력한 근태 번호
+    const empId = $('#emp_id').val(); // 사원 ID (readonly)
+    const currentCheckIn = $('#check_in_time').val(); // 기존 출근 시간
+    const currentCheckOut = $('#check_out_time').val(); // 기존 퇴근 시간
+    const updatedCheckIn = $('#new_check_in').val(); // 수정할 출근 시간
+    const updatedCheckOut = $('#new_check_out').val(); // 수정할 퇴근 시간
+    const workingOutsideTime = $('#new_WorkingOutside_time').val() || null; // 외근 시간 (Null 가능)
+    const requestDateTime = $('#created_at_time').val(); // 신청 날짜 및 시간
+    const reasonForModification = $('#modified_reasonA').val(); // 신청 이유
+    const attendanceStatus = $('#status').val(); // 상태
+
+    // 유효성 검사 및 기본값 설정
+    if (!attendanceId) {
+        alert("근태 번호를 입력해주세요.");
+        return; // 근태 번호가 없으면 함수 종료
+    }
+    
+    if (!currentCheckIn) {
+        alert("출근 시간을 입력해주세요.");
+        return; // 
+    }
+
+    if (!currentCheckOut) {
+        alert("퇴근 시간을 입력해주세요.");
+        return; // 
+    }
+
+    // 기본값 설정 (필요한 경우)
+    const finalCurrentCheckIn = currentCheckIn || "기본값"; // 예: 빈 문자열이나 "기본값"
+    const finalCurrentCheckOut = currentCheckOut || "기본값"; // 예: 빈 문자열이나 "기본값"
+
+    const formData = {
+        attendance_id: attendanceId,
+        emp_id: empId,
+        check_in: finalCurrentCheckIn ,
+        check_out: finalCurrentCheckOut,
+        new_check_in: updatedCheckIn,
+        new_check_out: updatedCheckOut,
+        new_WorkingOutside_time: workingOutsideTime,
+        created_at: requestDateTime,
+        modified_reason: reasonForModification,
+        status: attendanceStatus
+    };
+
+    console.log(formData); // 디버깅을 위한 로그 확인
+
+    $.ajax({
+        type: "POST",
+        url: "updateAttendanceA", // 서버로 요청할 URL
+        contentType: "application/json",
+        data: JSON.stringify(formData), // 데이터를 JSON 문자열로 변환하여 전송
+        success: function(response) {
+            alert("신청서가 제출되었습니다: " + response);
+            $('#updateModal').modal('hide'); // 모달 닫기
+            form.reset(); // 폼 초기화
+        },
+        error: function(xhr, status, error) {
+            console.error("Error:", error); // 디버깅을 위한 로그 확인
+            alert("신청서 제출에 실패했습니다: " + xhr.responseText);
+            form.reset(); // 폼 초기화
+        }
+    });
+}
+</script>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				<button class="btn1 btn-primary">
+					<span class="btn-label"> <i class="fa fa-bookmark"></i>
+					</span> 교육/출장 신청서
+				</button>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
@@ -463,8 +751,6 @@ function recordReturnTime() {
     	    nextDaySevenAM.setHours(7, 0, 0, 0);
     	    nextDaySevenAM.setDate(nextDaySevenAM.getDate() + 1); // 다음 날 오전 7시
 
-    	    console.log("checkInTime:", checkInTime);
-    	    console.log("checkOutTime:", checkOutTime);
 
     	    // 출근 시간이 기준 시간에 따라 상태 결정
     	    if (checkInTime > nineAM) {
@@ -532,6 +818,10 @@ function recordReturnTime() {
 		        });
 		    });
 		    </script>
+		    
+		    
+		    
+		    
 		    <script>
 		    $(document).ready(function() {
 		        $('#calculateButton').click(function() {
@@ -567,11 +857,7 @@ function recordReturnTime() {
         $('#checkoutButton').click(function() {
             // 출근 기록이 있는지 확인
             const checkinTime = $('#checkinTimeDisplay').text();
-            if (!checkinTime) {
-                alert('출근 기록이 없어 퇴근할 수 없습니다.');
-                return; // 퇴근 요청을 중단합니다.
-            }
-
+           
             if (confirm('퇴근하시겠습니까?')) {
                 $.ajax({
                     url: '<c:url value="checkOut" />',
@@ -590,7 +876,7 @@ function recordReturnTime() {
                 });
             }
         });
-    );
+  
 </script>
 
   

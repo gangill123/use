@@ -13,7 +13,8 @@
    
    
    
-  <title>근태관리</title>
+ 
+  
   <style>
     .container {
         margin-left: 0; /* 왼쪽 여백 제거 */
@@ -36,7 +37,9 @@
         font-weight: bold; /* 헤더 글씨 두껍게 */
     }
 	
-
+.btn-wide {
+    width: 150px; /* 원하는 너비로 조정 */
+}
 	
  
 </style>
@@ -92,12 +95,26 @@
   <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">근태관리</div>
+                    <div class="card-title">휴가관리</div>
                
 
 <div class="card-body">
     <div class="table-responsive">
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- 새로운 사원 휴가 관리 테이블 -->
+                    <div class="mt-5" style="margin: 0; padding: 0;">
+                        <h1>사원 휴가 관리</h1>
+                        
+                        
+ <div class="form-group form-inline">
+    <div class="col-md-6 p-0 d-flex align-items-center">
+        <input type="text" class="form-control input-full me-2" id="emp_id" placeholder="사원 ID를 입력하세요">
+        <button id="checkLeavesButton" class="btn btn-info btn-wide">사원 휴가 조회</button> <!-- CSS 클래스 적용 -->
+    </div>
+</div>         
+                        
             <div class="row">
                 <div class="col-sm-12 col-md-6">
                     <div class="dataTables_length" id="basic-datatables_length">
@@ -118,13 +135,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <!-- 새로운 사원 휴가 관리 테이블 -->
-                    <div class="mt-5" style="margin: 0; padding: 0;">
-                        <h1>사원 휴가 관리</h1>
-                        <input type="text" id="emp_id" placeholder="사원 ID를 입력하세요" />
-                        <button id="checkLeavesButton" class="btn btn-info">사원 휴가 조회</button>
 
                         <!-- 사원 휴가 데이터 테이블 -->
                         <div id="leaveData">

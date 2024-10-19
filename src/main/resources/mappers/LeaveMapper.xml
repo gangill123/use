@@ -87,9 +87,11 @@
 		lm.used_leave,
 		lm.remaining_leave
 		FROM leave_management lm
-		INNER JOIN employee e ON lm.emp_id = e.emp_id
+		INNER JOIN
+		employee e ON lm.emp_id = e.emp_id
 		WHERE e.emp_id = #{emp_id}
-		ORDER BY lm.annual_leave_start_date DESC;
+		ORDER BY
+		lm.annual_leave_start_date DESC;
 	</select>
 
 
@@ -121,10 +123,12 @@
 		resultType="com.Init.domain.LeaveVO">
 		SELECT l.*
 		FROM leave_management l
-		JOIN employee e ON l.emp_id = e.emp_id
+		JOIN employee e ON
+		l.emp_id = e.emp_id
 		WHERE l.emp_id = #{emp_id}
-		ORDER BY l.annual_leave_start_date DESC
-	
+		ORDER BY
+		l.annual_leave_start_date DESC
+
 	</select>
 
 	<!-- 기존 연차 정보 업데이트 쿼리 -->
@@ -132,22 +136,43 @@
 		parameterType="com.Init.domain.LeaveVO">
 		UPDATE leave_management
 		SET
-		used_annual_leave = #{used_annual_leave},
-		remaining_annual_leave = #{remaining_annual_leave}
+		used_annual_leave =
+		#{used_annual_leave},
+		remaining_annual_leave =
+		#{remaining_annual_leave}
 		WHERE emp_id = #{emp_id};
 	</update>
 	<!-- 휴가 쿼리 -->
-	
+
 	<insert id="insertLeaveRequestA"
 		parameterType="com.Init.domain.LeaveVO">
-		INSERT INTO leave_management (emp_id, leave_type, leave_start_date,
-		end_leave_date, reason, total_leave_days, leave_status)
-		VALUES (#{emp_id}, #{leave_type}, #{leave_start_date}, #{end_leave_date},
+		INSERT INTO leave_management (emp_id, leave_type,
+		leave_start_date,
+		end_leave_date, reason, total_leave_days,
+		leave_status)
+		VALUES (#{emp_id}, #{leave_type}, #{leave_start_date},
+		#{end_leave_date},
 		#{reason}, #{total_leave_days}, #{leave_status});
 	</insert>
 
-
-
+	<!--나의 휴가 현황 -->
+	<select id="findLeaveByEmpId" parameterType="String"
+		resultType="com.Init.domain.LeaveVO">
+		SELECT
+		emp_id,
+		total_annual_leave,
+		used_annual_leave ,
+		remaining_annual_leave ,
+		total_leave_days ,
+		used_leave ,
+		remaining_leave ,
+		leave_type ,
+		leave_start_date ,
+		end_leave_date,
+		leave_status
+		FROM leave_management
+		WHERE emp_id = #{emp_id};
+	</select>
 
 
 </mapper>

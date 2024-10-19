@@ -127,8 +127,12 @@
                 <label for="reason">신청 사유:</label>
                 <textarea id="reason" name="reason" class="form-control" rows="4" required></textarea>
             </div>
-
-            <button type="submit" class="btn btn-primary">신청하기</button>
+		
+      
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">신청</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeLeaveModal()">닫기</button>
+                </div>
         </form>
     </div>
 </div>
@@ -317,60 +321,60 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
 
 
 <!-- 휴직 신청서 버튼 -->
-<button class="btn1 btn-primary" onclick="openLeaveRequestModal()">
+<button class="btn1 btn-primary" onclick="openLeaveApplicationModal()">
     <span class="btn-label"><i class="fa fa-bookmark"></i></span> 휴직 신청서
 </button>
 
 <!-- 휴직 신청 모달 -->
-<div class="modal fade" id="leaveRequestModal" tabindex="-1" role="dialog" aria-labelledby="leaveRequestModalLabel" aria-hidden="true">
+<div class="modal fade" id="leaveApplicationModal" tabindex="-1" role="dialog" aria-labelledby="leaveApplicationModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="leaveRequestModalLabel">휴직 신청서</h5>
-                <button type="button" class="close" onclick="closeLeaveRequestModal()">
+                <h5 class="modal-title" id="leaveApplicationModalLabel">휴직 신청서</h5>
+                <button type="button" class="close" onclick="closeLeaveApplicationModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="leaveRequestForm">
+            <form id="leaveApplicationForm">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="empId">사원 번호:</label>
-                        <input type="text" id="empId" name="emp_id" class="form-control" value="<%= empId %>" readonly required>
+                        <label for="empIdLeave">사원 번호:</label>
+                        <input type="text" id="empIdLeave" name="emp_id" class="form-control" value="<%= empId %>" readonly required>
                     </div>
                     <div class="form-group">
-                        <label for="leave_type">휴직 유형</label>
-                        <select class="form-control" id="leave_type" name="leave_type" required>
-                            <option value="연차">육아휴직</option>
-                            <option value="병가">병가휴직</option>
-                            <option value="특별휴가">기타사유</option>
+                        <label for="leave_type_leave">휴직 유형</label>
+                        <select class="form-control" id="leave_type_leave" name="leave_type" required>
+                            <option value="육아휴직">육아휴직</option>
+                            <option value="병가휴직">병가휴직</option>
+                            <option value="기타사유">기타사유</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="leave_start_date">휴직 시작일</label>
-                        <input type="date" class="form-control" id="leave_start_date" name="leave_start_date" required>
+                        <label for="leave_start_date_leave">휴직 시작일</label>
+                        <input type="date" class="form-control" id="leave_start_date_leave" name="leave_start_date" required>
                     </div>
                     <div class="form-group">
-                        <label for="end_leave_date">휴직 종료일</label>
-                        <input type="date" class="form-control" id="end_leave_date" name="end_leave_date" required>
+                        <label for="end_leave_date_leave">휴직 종료일</label>
+                        <input type="date" class="form-control" id="end_leave_date_leave" name="end_leave_date" required>
                     </div>
                     <div class="form-group">
-                        <label for="total_leave_days">총 휴직 일수</label>
-                        <input type="number" class="form-control" id="total_leave_days" name="total_leave_days" required>
+                        <label for="total_leave_days_leave">총 휴직 일수</label>
+                        <input type="number" class="form-control" id="total_leave_days_leave" name="total_leave_days" required>
                     </div>
                     <div class="form-group">
-                        <label for="leave_status">결재 상태</label>
-                        <select class="form-control" id="leave_status" name="leave_status" required>
+                        <label for="leave_status_leave">결재 상태</label>
+                        <select class="form-control" id="leave_status_leave" name="leave_status" required>
                             <option value="대기">진행중</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="reason">신청 사유</label>
-                        <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
+                        <label for="reason_leave">신청 사유</label>
+                        <textarea class="form-control" id="reason_leave" name="reason" rows="3" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">신청</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeLeaveRequestModal()">닫기</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeLeaveApplicationModal()">닫기</button>
                 </div>
             </form>
         </div>
@@ -378,28 +382,28 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
 </div>
 
 <script>
-    // 모달 열기 함수
-    function openLeaveRequestModal() {
-        $('#leaveRequestModal').modal('show'); // Bootstrap의 모달을 수동으로 열기
+    // 휴직 모달 열기 함수
+    function openLeaveApplicationModal() {
+        $('#leaveApplicationModal').modal('show'); // Bootstrap의 모달을 수동으로 열기
     }
 
-    // 모달 닫기 함수
-    function closeLeaveRequestModal() {
-        $('#leaveRequestModal').modal('hide'); // Bootstrap의 모달을 수동으로 닫기
+    // 휴직 모달 닫기 함수
+    function closeLeaveApplicationModal() {
+        $('#leaveApplicationModal').modal('hide'); // Bootstrap의 모달을 수동으로 닫기
     }
 
-    // 폼 제출 시 처리
-    document.getElementById("leaveRequestForm").addEventListener("submit", function(event) {
+    // 휴직 폼 제출 시 처리
+    document.getElementById("leaveApplicationForm").addEventListener("submit", function(event) {
         event.preventDefault(); // 폼 기본 동작 막기
 
         // 입력된 값 가져오기
-        const empId = document.getElementById("empId").value;
-        const leaveType = document.getElementById("leave_type").value;
-        const leaveStartDate = document.getElementById("leave_start_date").value;
-        const endLeaveDate = document.getElementById("end_leave_date").value;
-        const totalLeaveDays = document.getElementById("total_leave_days").value;
-        const leaveStatus = document.getElementById("leave_status").value;
-        const reason = document.getElementById("reason").value;
+        const empId = document.getElementById("empIdLeave").value;
+        const leaveType = document.getElementById("leave_type_leave").value;
+        const leaveStartDate = document.getElementById("leave_start_date_leave").value;
+        const endLeaveDate = document.getElementById("end_leave_date_leave").value;
+        const totalLeaveDays = document.getElementById("total_leave_days_leave").value;
+        const leaveStatus = document.getElementById("leave_status_leave").value;
+        const reason = document.getElementById("reason_leave").value;
 
         // 서버에 데이터 전송하는 로직 추가 (AJAX 사용)
         $.ajax({
@@ -418,8 +422,8 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
             success: function(response) {
                 // 요청이 성공했을 때의 처리
                 console.log("휴직 신청이 완료되었습니다:", response);
-                alert("휴직 신청이 완료되었습니다: "); // 알림창으로 결과 보여주기
-                closeLeaveRequestModal(); // 성공한 후에 모달 닫기
+                alert("휴직 신청이 완료되었습니다."); // 알림창으로 결과 보여주기
+                closeLeaveApplicationModal(); // 성공한 후에 모달 닫기
             },
             error: function(xhr, status, error) {
                 // 요청이 실패했을 때의 처리
@@ -436,17 +440,104 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
 
 
 
+<!-- 나의 휴가 현황 버튼 -->
+<button class="btn1 btn-primary" onclick="openLeaveStatusModal()">
+    <span class="btn-label">
+        <i class="fa fa-bookmark"></i>
+    </span>
+    나의 휴가 현황
+</button>
 
+<!-- 나의 휴가 현황 모달 -->
+<div class="modal fade" id="leaveStatusModal" tabindex="-1" role="dialog" aria-labelledby="leaveStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document"> <!-- modal-lg로 크기 조정 -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="leaveStatusModalLabel">나의 휴가 현황</h5>
+                <button type="button" class="close" onclick="closeLeaveStatusModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="overflow-x: auto;"> <!-- 가로 스크롤을 위한 div -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>사원 번호</th>
+                                <th>총 연차 일수</th>
+                                <th>사용 연차</th>
+                                <th>잔여 연차</th>
+                                <th>총 휴가 일수</th>
+                                <th>사용한 휴가</th>
+                                <th>잔여 휴가</th>
+                                <th>휴가 유형</th>
+                                <th>휴가 시작일</th>
+                                <th>휴가 종료일</th>
+                                <th>승인 상태</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaveInfoTableBody">
+                            <!-- AJAX로 불러온 정보를 여기에 표시합니다 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeLeaveStatusModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script>
+function closeLeaveStatusModal() {
+    $('#leaveStatusModal').modal('hide');
+}
+    // 나의 휴가 현황 모달 열기 함수
+    function openLeaveStatusModal() {
+        const empId = '<%= empId %>'; // 세션에서 emp_id 가져오기
+        $('#leaveStatusModal').modal('show');
+        
+        // 휴가 현황을 조회하는 AJAX 요청
+        $.ajax({
+            type: "GET",
+            url: "getLeaveStatus", // 서버의 엔드포인트 설정
+            data: { emp_id: empId },
+            success: function(response) {
+                // 요청이 성공했을 때 데이터를 화면에 출력
+                displayLeaveInfo(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("휴가 현황 조회 실패:", error);
+                $('#leaveInfoTableBody').html("<tr><td colspan='11'>휴가 현황을 불러오는 데 실패했습니다.</td></tr>");
+            }
+        });
+    }
 
-					<button class="btn1 btn-primary">
-                        <span class="btn-label">
-                          <i class="fa fa-bookmark"></i>
-                        </span>
-                       		나의 휴가 현황
-              </button>
-
-
+    // 휴가 정보를 화면에 표시하는 함수
+    function displayLeaveInfo(data) {
+        const leaveInfoTableBody = document.getElementById("leaveInfoTableBody");
+        leaveInfoTableBody.innerHTML = ""; // 기존 데이터 초기화
+        
+        // 테이블에 한 행 추가
+        data.forEach(leave => {
+            leaveInfoTableBody.innerHTML +=
+                "<tr>" + // 각 leave 정보를 새로운 행으로 시작
+                    "<td>" + leave.emp_id + "</td>" +
+                    "<td>" + leave.total_annual_leave + "</td>" +
+                    "<td>" + leave.used_annual_leave + "</td>" +
+                    "<td>" + leave.remaining_annual_leave + "</td>" +
+                    "<td>" + leave.total_leave_days + "</td>" +
+                    "<td>" + leave.used_leave + "</td>" +
+                    "<td>" + leave.remaining_leave + "</td>" +
+                    "<td>" + leave.leave_type + "</td>" +
+                    "<td>" + leave.leave_start_date + "</td>" +
+                    "<td>" + leave.leave_end_date + "</td>" +
+                    "<td>" + leave.leave_status + "</td>" +
+                "</tr>"; // 행을 닫음
+        });
+    }
+</script>
 
 
 <div class="card-header">
@@ -493,7 +584,7 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
 							aria-controls="basic-datatables" rowspan="1"
 							colspan="1"
 							aria-label="Position: activate to sort column ascending"
-							style="width: 366.031px;">자동부여</th>
+							style="width: 366.031px;">부여</th>
 						<th class="sorting" tabindex="0"
 							aria-controls="basic-datatables" rowspan="1"
 							colspan="1"

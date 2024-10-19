@@ -60,5 +60,9 @@ public class LeaveServiceImpl implements LeaveService {
 	public void submitLeaveRequest(LeaveVO leaveVO) {
 		leaveDAO.insertLeaveRequestA (leaveVO); // DAO 메서드 호출
 	}
-
+	 @Override
+	    public List<LeaveVO> getLeaveStatus(String emp_id) {
+	    // Mapper를 통해 데이터베이스에서 정보를 조회
+	   return leaveDAO.findLeaveByEmpId(emp_id);
+	    }
 }

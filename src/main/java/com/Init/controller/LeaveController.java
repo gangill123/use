@@ -146,6 +146,13 @@ public class LeaveController {
 	    }
     
     
-	
+	   // 휴가 현황 조회 
+	    @GetMapping("/getLeaveStatus")
+	    @ResponseBody
+	    public List<LeaveVO> getLeaveStatus(@RequestParam("emp_id") String emp_id) {
+	        // emp_id를 기반으로 휴가 정보 조회
+	        return leaveService.getLeaveStatus(emp_id);
+	    }
+	 
 
 }

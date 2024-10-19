@@ -13,10 +13,18 @@
 		WHERE a.emp_id = #{emp_id}
 	</select>
 
-	<!-- 출근 기록 -->
+	<!-- 출근 기록 추가 쿼리 -->
 	<insert id="recordCheckIn" parameterType="String">
-		INSERT INTO attendance_ch (emp_id, check_in)
-		VALUES (#{emp_id}, NOW());
+	   
+    
+        INSERT INTO attendance_ch (emp_id, check_in)
+        SELECT #{emp_id}, NOW()
+        WHERE NOT EXISTS (
+            SELECT 1 FROM attendance_ch 
+            WHERE emp_id = #{emp_id} 
+            AND DATE(check_in) = CURDATE()
+        )
+    
 	</insert>
 
 	<!-- 퇴근시간 -->
@@ -133,8 +141,8 @@
 	</select>
 
 	<insert id="insertOvertime" parameterType="com.Init.domain.AttendanceVO">
-		INSERT INTO attendance_ch (emp_id, created_at, check_in, check_out, overtime, status, modified_reason)
-		VALUES (#{emp_id}, #{created_at}, #{check_in}, #{check_out}, #{overtime}, #{status}, #{modified_reason})
+		INSERT INTO attendance_ch (emp_id, workform_status, created_at, check_in, check_out, overtime, status, modified_reason)
+		VALUES (#{emp_id},  #{workform_status}, #{created_at}, #{check_in}, #{check_out}, #{overtime}, #{status}, #{modified_reason})
 	</insert>
 	
 	  <!-- 외출 시간 업데이트 쿼리 -->
@@ -151,7 +159,25 @@
         WHERE emp_id = #{emp_id} AND attendance_id = #{attendance_id}
     </update>
 	
-	
+	 <select id="getAttendanceByEmpId" parameterType="String" resultType="com.Init.domain.AttendanceVO">
+        SELECT * FROM attendance_ch
+        WHERE emp_id = #{emp_id}
+    </select>
+    
+      <update id="updateAttendanceA" parameterType="com.Init.domain.AttendanceVO">
+        UPDATE attendance_ch
+        SET 
+            emp_id = #{emp_id}, 
+            check_in = #{check_in}, 
+            check_out = #{check_out}, 
+            new_check_in = #{new_check_in}, 
+            new_check_out = #{new_check_out}, 
+            new_WorkingOutside_time = #{new_WorkingOutside_time}, 
+            created_at = #{created_at, jdbcType=TIMESTAMP}, 
+            modified_reason = #{modified_reason}, 
+            status = #{status}
+        WHERE attendance_id = #{attendance_id}
+    </update>
 	
 	
 	

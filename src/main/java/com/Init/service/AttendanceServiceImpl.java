@@ -2,6 +2,7 @@ package com.Init.service;
 
 import java.util.List; 
 
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -33,14 +34,6 @@ public class AttendanceServiceImpl implements AttendanceService {
 
 		attendanceDAO.checkIn(emp_id);
 	}
-//
-//	@Override
-//	public void checkOut(AttendanceVO attendance) {
-//	    // 퇴근 기록을 저장하는 로직
-//	    AttendanceVO checkOut = new AttendanceVO();s
-//	    checkOut.setEmp_id(attendance.getEmp_id()); // attendance 객체에서 emp_id 가져오기
-//	    attendanceDAO.checkOut(checkOut);
-//	}
 
 	// QR출근 처리
 	@Override
@@ -146,7 +139,13 @@ public class AttendanceServiceImpl implements AttendanceService {
 	public void updateReturnTime(AttendanceVO attendanceVO) {
 		attendanceDAO.updateReturnTime(attendanceVO);
 	}
-	
-	
+
+    @Override
+    public List<AttendanceVO> getAttendanceByEmpId(String emp_id) {
+        return attendanceDAO.getAttendanceByEmpId(emp_id);
+    }
+    public void updateAttendanceRecordA(AttendanceVO attendanceVO) {
+        attendanceDAO.updateAttendanceA(attendanceVO); // DAO 호출
+    }
 
 }

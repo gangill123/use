@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.Init.domain.AttendanceVO;
+import com.Init.domain.LeaveVO;
 import com.Init.service.AttendanceService;
 
 @Controller
@@ -297,5 +298,28 @@ public class AttendanceController {
             return new ResponseEntity<>("오류 발생: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/attendanceDataA")
+    @ResponseBody
+    public List<AttendanceVO> getAttendanceDataA(@RequestParam("emp_id") String emp_id) {
+        List<AttendanceVO> attendanceList = attendanceService.getAttendanceByEmpId(emp_id);
+        System.out.println("Attendance List: " + attendanceList); // 로그 추가
+        return attendanceList;
+    }
+    
+    @PostMapping("/updateAttendanceA")
+    public ResponseEntity<String> updateAttendanceA(@RequestBody AttendanceVO attendanceVO) {
+    	  
 
+        try {
+            attendanceService.updateAttendanceRecordA(attendanceVO);
+            return ResponseEntity.ok("신청서가 제출되었습니다.");
+        } catch (Exception e) {
+            logger.error("신청서 제출에 실패했습니다: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("신청서 제출에 실패했습니다.");
+        }
+    }
+  
+    
+    
+    
 }

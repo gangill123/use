@@ -19,4 +19,6 @@ public interface LeaveService {
 	public void useAnnualLeave(LeaveVO leaveVO);
 
 	public void submitLeaveRequest(LeaveVO leaveVO);
+
+	List<LeaveVO> getLeaveStatus(String emp_id);
 }
