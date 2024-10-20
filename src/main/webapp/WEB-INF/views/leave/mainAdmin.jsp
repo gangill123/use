@@ -343,50 +343,47 @@ $(document).ready(function() {
                 if (leaves.length > 0) {
                     $.each(leaves, function(index, leave) {
                     	   $("#checkLeaveList").append(
-                    	            "<tr>" +
-                    	            "<td>" + leave.leave_id + "</td>" +
-                    	            "<td>" + leave.emp_id + "</td>" +
-                    	            "<td>" + leave.leave_type + "</td>" +
-                    	            "<td>" + leave.leave_start_date + "</td>" +
-                    	            "<td>" + leave.end_leave_date + "</td>" +
-                    	            "<td>" + leave.t_leave + "</td>" +
-                    	            
-                    	            "<td>" + leave.total_leave_days + "</td>" +
-                    	            "<td>" + leave.used_leave + "</td>" +
-                    	            "<td>" + leave.remaining_leave + "</td>" +
-                    	            
-                    	            "<td>" + leave.annual_leave_start_date + "</td>" +
-                    	            "<td>" + leave.end_annual_leave + "</td>" +
-                    	            "<td>" + leave.total_annual_leave + "</td>" +
-                    	            "<td>" + leave.used_annual_leave + "</td>" +
-                    	            "<td>" + leave.remaining_annual_leave + "</td>" +
-                    	            "<td>" + leave.leave_status + "</td>" + // 
-                    	            "<td>" + leave.reason + "</td>" +
-                    	            "<td>" + leave.requested_at + "</td>" +
-                    	            "<td>" + leave.approval_date + "</td>" +                  	            
-                    	            
-                    	            
-                    	            "<td><button class='btn btn-warning edit-button' data-id='" + leave.leave_id + "' " +
-                    	            "data-leave-type='" + leave.leave_type + "' " +
-                    	            "data-leave-start-date='" + leave.leave_start_date + "' " +
-                    	            "data-end-leave-date='" + leave.end_leave_date + "' " +
-                    	            "data-total-leave-days='" + leave.total_leave_days + "' " + // 총 휴가일수 추가
-                    	            "data-used-leave='" + leave.used_leave + "' " + // 사용된 휴가일수 추가
-                    	            "data-remaining-leave='" + leave.remaining_leave + "' " + // 남은 휴가일수 추가
-                    	            "data-t-leave='" + leave.t_leave + "' " +
-                    	            "data-annual-leave-start-date='" + leave.annual_leave_start_date + "' " +
-                    	            "data-end-annual-leave='" + leave.end_annual_leave + "' " +
-                    	            "data-total-annual-leave='" + leave.total_annual_leave + "' " +
-                    	            "data-used-annual-leave='" + leave.used_annual_leave + "' " +
-                    	            "data-remaining-annual-leave='" + leave.remaining_annual_leave + "' " +
-                    	            "data-leave-status='" + leave.leave_status + "' " + 
-                    	            "data-reason='" + leave.reason + "' " +                  	            
-                    	            ">수정</button>" +
-                    	            "</td>" +
-                    	            "<td>" +
-                    	                "<button type='button' class='btn btn-warning delete-button' data-id='" + leave.leave_id + "'>삭제</button>" +
-                    	            "</td>" +
-                    	            "</tr>"
+                    			   "<tr>" +
+                    			    "<td>" + (leave.leave_id || "-") + "</td>" +
+                    			    "<td>" + (leave.emp_id || "-") + "</td>" +
+                    			    "<td>" + (leave.leave_type || "-") + "</td>" +
+                    			    "<td>" + (leave.leave_start_date || "-") + "</td>" +
+                    			    "<td>" + (leave.end_leave_date || "-") + "</td>" +
+                    			    "<td>" + (leave.t_leave || "-") + "</td>" +
+                    			    "<td>" + (leave.total_leave_days || "-") + "</td>" +
+                    			    "<td>" + (leave.used_leave || "-") + "</td>" +
+                    			    "<td>" + (leave.remaining_leave || "-") + "</td>" +
+                    			    "<td>" + (leave.annual_leave_start_date || "-") + "</td>" +
+                    			    "<td>" + (leave.end_annual_leave || "-") + "</td>" +
+                    			    "<td>" + (leave.total_annual_leave || "-") + "</td>" +
+                    			    "<td>" + (leave.used_annual_leave || "-") + "</td>" +
+                    			    "<td>" + (leave.remaining_annual_leave || "-") + "</td>" +
+                    			    "<td>" + (leave.leave_status || "-") + "</td>" +
+                    			    "<td>" + (leave.reason || "-") + "</td>" +
+                    			    "<td>" + (leave.requested_at || "-") + "</td>" +
+                    			    "<td>" + (leave.approval_date || "-") + "</td>" +
+                    			    "<td>" +
+                    			        "<button class='btn btn-warning edit-button' data-id='" + leave.leave_id + "' " +
+                    			        "data-leave-type='" + leave.leave_type + "' " +
+                    			        "data-leave-start-date='" + leave.leave_start_date + "' " +
+                    			        "data-end-leave-date='" + leave.end_leave_date + "' " +
+                    			        "data-total-leave-days='" + leave.total_leave_days + "' " +
+                    			        "data-used-leave='" + leave.used_leave + "' " +
+                    			        "data-remaining-leave='" + leave.remaining_leave + "' " +
+                    			        "data-t-leave='" + leave.t_leave + "' " +
+                    			        "data-annual-leave-start-date='" + leave.annual_leave_start_date + "' " +
+                    			        "data-end-annual-leave='" + leave.end_annual_leave + "' " +
+                    			        "data-total-annual-leave='" + leave.total_annual_leave + "' " +
+                    			        "data-used-annual-leave='" + leave.used_annual_leave + "' " +
+                    			        "data-remaining-annual-leave='" + leave.remaining_annual_leave + "' " +
+                    			        "data-leave-status='" + leave.leave_status + "' " +
+                    			        "data-reason='" + leave.reason + "' " +
+                    			        ">수정</button>" +
+                    			    "</td>" +
+                    			    "<td>" +
+                    			        "<button type='button' class='btn btn-warning delete-button' data-id='" + leave.leave_id + "'>삭제</button>" +
+                    			    "</td>" +
+                    			"</tr>"
                         );
                     });
                 } else {

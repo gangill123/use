@@ -33,6 +33,8 @@ public interface LeaveDAO {
 	void insertLeaveRequestA(LeaveVO leaveVO);
 
 	List<LeaveVO> findLeaveByEmpId(String emp_id);
+
+	void updateLeaveInfo(LeaveVO leaveVO);
 	
 	
 }

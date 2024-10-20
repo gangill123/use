@@ -122,6 +122,10 @@
 			special_working_time = #{special_working_time},
 			modified_reason = #{modified_reason},
 			modified_time = #{modified_time},
+			businessDate = #{businessDate}, 
+			business_endDate = #{business_endDate}, 
+			educationDate = #{educationDate}, 
+			education_endDate = #{educationDate},						
 			modified_person = #{modified_person},
 			workform_status = #{workform_status}
 		WHERE attendance_id = #{attendance_id}
@@ -141,8 +145,8 @@
 	</select>
 
 	<insert id="insertOvertime" parameterType="com.Init.domain.AttendanceVO">
-		INSERT INTO attendance_ch (emp_id, workform_status, created_at, check_in, check_out, overtime, status, modified_reason)
-		VALUES (#{emp_id},  #{workform_status}, #{created_at}, #{check_in}, #{check_out}, #{overtime}, #{status}, #{modified_reason})
+		INSERT INTO attendance_ch (emp_id, workform_status, created_at, check_in, check_out, overtime, night_work_time, special_working_time, status, modified_reason)
+		VALUES (#{emp_id},  #{workform_status}, #{created_at}, #{check_in}, #{check_out}, #{overtime}, #{night_work_time}, #{special_working_time}, #{status}, #{modified_reason})
 	</insert>
 	
 	  <!-- 외출 시간 업데이트 쿼리 -->
@@ -173,13 +177,17 @@
             new_check_in = #{new_check_in}, 
             new_check_out = #{new_check_out}, 
             new_WorkingOutside_time = #{new_WorkingOutside_time}, 
-            created_at = #{created_at, jdbcType=TIMESTAMP}, 
+            created_at = #{created_at}, 
             modified_reason = #{modified_reason}, 
             status = #{status}
         WHERE attendance_id = #{attendance_id}
     </update>
-	
-	
+  
+<insert id="insertBusinessTrip" parameterType="com.Init.domain.AttendanceVO">
+    INSERT INTO attendance_ch (emp_id, created_at, businessDate, business_endDate, educationDate, education_endDate, workform_status, modified_reason, status)
+    VALUES (#{emp_id}, #{created_at},#{businessDate}, #{business_endDate}, #{educationDate}, #{education_endDate}, #{workform_status}, #{modified_reason}, #{status})
+
+</insert>
 	
 	
 </mapper>

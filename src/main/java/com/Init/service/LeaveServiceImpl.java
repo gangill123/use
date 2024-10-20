@@ -52,17 +52,21 @@ public class LeaveServiceImpl implements LeaveService {
 
 	@Override
 	public void useAnnualLeave(LeaveVO leaveVO) {
+		
+		    // 4. 데이터베이스에 연차 신청 요청 저장
+		    leaveDAO.insertLeaveRequest(leaveVO); // 연차 사용 요청 저장
 
-		leaveDAO.insertLeaveRequest(leaveVO); // 연차 신청 요청 추가 쿼리 호출
 	}
-	// 휴가 신청서 
+
+	// 휴가 신청서
 	@Override
 	public void submitLeaveRequest(LeaveVO leaveVO) {
-		leaveDAO.insertLeaveRequestA (leaveVO); // DAO 메서드 호출
+		leaveDAO.insertLeaveRequestA(leaveVO); // DAO 메서드 호출
 	}
-	 @Override
-	    public List<LeaveVO> getLeaveStatus(String emp_id) {
-	    // Mapper를 통해 데이터베이스에서 정보를 조회
-	   return leaveDAO.findLeaveByEmpId(emp_id);
-	    }
+
+	@Override
+	public List<LeaveVO> getLeaveStatus(String emp_id) {
+		// Mapper를 통해 데이터베이스에서 정보를 조회
+		return leaveDAO.findLeaveByEmpId(emp_id);
+	}
 }

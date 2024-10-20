@@ -132,7 +132,7 @@
     <div class="col-md-6 p-0 d-flex align-items-center">
         <input type="text" class="form-control input-full me-2" id="emp_id" placeholder="사원 ID를 입력하세요">
 </div>       
-        <button id="checkTimeButton" class="btn btn-info btn-wide">사원 휴가 조회</button> <!-- CSS 클래스 적용 -->
+        <button id="checkTimeButton" class="btn btn-info btn-wide">사원 근태 조회</button> <!-- CSS 클래스 적용 -->
     </div>
 
 
@@ -159,7 +159,11 @@
                         <th>신청일</th>
                         <th>근태 ID</th>
                         <th>상태</th>
-                        <th>초과 근무 시간</th>
+                        <th>초과 근무 시간</th>                        
+                        <th>출장 시작 날짜</th>
+                        <th>출장 종료 날짜</th>
+                        <th>교육 시작 날짜</th>
+                        <th>교육 종료 날짜</th>                   
                         <th>수정 이유</th>
                         <th>수정인</th>
                         <th>수정</th>
@@ -192,23 +196,23 @@
 		                </div>
                             <div class="form-group">
                                 <label for="modalCheckInInput">출근</label>
-                                <input type="text" class="form-control" id="modalCheckInInput">
+                                <input type="text" class="form-control" id="modalCheckInInput" placeholder="yyyy-MM-dd HH:mm:ss">
                             </div>
                             <div class="form-group">
                                 <label for="modalCheckOutInput">퇴근</label>
-                                <input type="text" class="form-control" id="modalCheckOutInput">
+                                <input type="text" class="form-control" id="modalCheckOutInput" placeholder="yyyy-MM-dd HH:mm:ss">
                             </div>
                             <div class="form-group">
                                 <label for="modalWorkingOutsideTimeInput">외출 시간</label>
-                                <input type="text" class="form-control" id="modalWorkingOutsideTimeInput">
+                                <input type="text" class="form-control" id="modalWorkingOutsideTimeInput" placeholder="yyyy-MM-dd HH:mm:ss">
                             </div>
                             <div class="form-group">
                                 <label for="modalReturnTimeInput">복귀 시간</label>
-                                <input type="text" class="form-control" id="modalReturnTimeInput">
+                                <input type="text" class="form-control" id="modalReturnTimeInput" placeholder="yyyy-MM-dd HH:mm:ss">
                             </div>
                             <div class="form-group">
                                 <label for="modalWorkingTimeInput">근무 시간</label>
-                                <input type="text" class="form-control" id="modalWorkingTimeInput">
+                                <input type="text" class="form-control" id="modalWorkingTimeInput" >
                             </div>
                             <div class="form-group">
                                 <label for="modalNightWorkTimeInput">야간 근무 시간</label>
@@ -216,27 +220,27 @@
                             </div>
                             <div class="form-group">
                                 <label for="modalSpecialWorkingTimeInput">특별 근무 시간</label>
-                                <input type="text" class="form-control" id="modalSpecialWorkingTimeInput">
+                                <input type="text" class="form-control" id="modalSpecialWorkingTimeInput" >
                             </div>
                             <div class="form-group">
                                 <label for="modalNewCheckInInput">출근 수정 시간</label>
-                                <input type="text" class="form-control" id="modalNewCheckInInput">
+                                <input type="text" class="form-control" id="modalNewCheckInInput" placeholder="yyyy-MM-dd HH:mm:ss" >
                             </div>
                             <div class="form-group">
                                 <label for="modalNewCheckOutInput">퇴근 수정 시간</label>
-                                <input type="text" class="form-control" id="modalNewCheckOutInput">
+                                <input type="text" class="form-control" id="modalNewCheckOutInput" placeholder="yyyy-MM-dd HH:mm:ss">
                             </div>
                             <div class="form-group">
                                 <label for="modalNewWorkingOutsideTimeInput">외출 수정 시간</label>
-                                <input type="text" class="form-control" id="modalNewWorkingOutsideTimeInput">
+                                <input type="text" class="form-control" id="modalNewWorkingOutsideTimeInput" placeholder="yyyy-MM-dd HH:mm:ss">
                             </div>
                             <div class="form-group">
                                 <label for="modalModifiedTimeInput">수정 일자</label>
-                                <input type="text" class="form-control" id="modalModifiedTimeInput">
+                                <input type="text" class="form-control" id="modalModifiedTimeInput" placeholder="yyyy-MM-dd HH:mm:ss">
                             </div>
                             <div class="form-group">
                                 <label for="modalCreatedAtInput">신청 일자</label>
-                                <input type="text" class="form-control" id="modalCreatedAtInput" readonly>
+                                <input type="text" class="form-control" id="modalCreatedAtInput" placeholder="yyyy-MM-dd HH:mm:ss" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="modalStatusInput">상태</label>
@@ -245,13 +249,33 @@
                             <div class="form-group">
                                 <label for="modalOvertimeInput">초과 근무</label>
                                 <input type="text" class="form-control" id="modalOvertimeInput">
+                            
                             </div>
+                            
+                    <div class="form-group">
+                        <label for="modalBusinessDateInput">출장 시작 날짜</label>
+                        <input type="date" class="form-control" id="modalBusinessDateInput" placeholder="yyyy-MM-dd" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalBusinessEndDateInput">출장 종료 날짜</label>
+                        <input type="date" class="form-control" id="modalBusinessEndDateInput" placeholder="yyyy-MM-dd" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalEducationDateInput">교육 시작 날짜</label>
+                        <input type="date" class="form-control" id="modalEducationDateInput" placeholder="yyyy-MM-dd" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalEducationEndDateInput">교육 종료 날짜</label>
+                        <input type="date" class="form-control" id="modalEducationEndDateInput" placeholder="yyyy-MM-dd" required>
+                    </div>
+                            
+                            
                             <div class="form-group">
-                                <label for="modalModifiedReasonInput">수정 사유</label>
+                                <label for="modalModifiedReasonInput">신청 사유</label>
                                 <input type="text" class="form-control" id="modalModifiedReasonInput">
                             </div>
                             <div class="form-group">
-                                <label for="modalModifiedPersonInput">수정자</label>
+                                <label for="modalModifiedPersonInput">수정인</label>
                                 <input type="text" class="form-control" id="modalModifiedPersonInput">
                             </div>
                             
@@ -260,7 +284,7 @@
 		                    <input type="text" class="form-control" id="modalWorkStatusInput" placeholder="근무 상태를 입력하세요" /> <!-- 근무 상태 추가 -->
 		                </div>
                             
-                        </form>
+                       
                         <div id="successMessage" class="alert alert-success" style="display: none;">수정 완료</div>
                     </div>
             <div class="modal-footer">
@@ -298,53 +322,61 @@
                     if (data.length > 0) {
                         $.each(data, function(index, attendance) {
                             $("#checkTimeList").append(
-                                    "<tr>" +
-                                    "<td>" + attendance.emp_id + "</td>" +
-                                    "<td>" + attendance.emp_cid + "</td>" +
-                                    "<td>" + attendance.check_in + "</td>" +
-                                    "<td>" + attendance.check_out + "</td>" +
-                                    "<td>" + attendance.workingoutside_time + "</td>" +
-                                    "<td>" + attendance.return_time + "</td>" +
-                                    "<td>" + attendance.working_time + "</td>" +
-                                    "<td>" + attendance.night_work_time + "</td>" +
-                                    "<td>" + attendance.special_working_time + "</td>" +
-                                    "<td>" + attendance.workform_status + "</td>" +
-                                    "<td>" + attendance.new_check_in + "</td>" +
-                                    "<td>" + attendance.new_check_out + "</td>" +
-                                    "<td>" + attendance.new_workingoutside_time + "</td>" +
-                                    "<td>" + attendance.modified_time + "</td>" +
-                                    "<td>" + attendance.created_at + "</td>" +
-                                    "<td>" + attendance.attendance_id + "</td>" +
-                                    "<td>" + attendance.status + "</td>" +
-                                    "<td>" + attendance.overtime + "</td>" +
-                                    "<td>" + attendance.modified_reason + "</td>" +
-                                    "<td>" + attendance.modified_person + "</td>" +
-                                    "<td><button class='btn btn-warning edit-button' data-id='" + attendance.attendance_id + "' " +
-                                    "data-emp-id='" + attendance.emp_id + "' " + // EMP ID 추가
-                                    "data-check-in='" + attendance.check_in + "' " +
-                                    "data-check-out='" + attendance.check_out + "' " +
-                                    "data-workingoutside-time='" + attendance.workingOutside_time + "' " +
-                                    "data-return-time='" + attendance.return_time + "' " +
-                                    "data-working-time='" + attendance.working_time + "' " +
-                                    "data-night-work-time='" + attendance.night_work_time + "' " +
-                                    "data-special-working-time='" + attendance.special_working_time + "' " +
-                                    "data-new-check-in='" + attendance.new_check_in + "' " +
-                                    "data-new-check-out='" + attendance.new_check_out + "' " +
-                                    "data-new-workingoutside-time='" + attendance.new_workingoutside_time + "' " +
-                                    "data-modified-time='" + attendance.modified_time + "' " +
-                                    "data-created-at='" + attendance.created_at + "' " +
-                                    "data-status='" + attendance.status + "' " +
-                                    "data-overtime='" + attendance.overtime + "' " +
-                                    "data-modified-reason='" + attendance.modified_reason + "' " +
-                                    "data-modified-person='" + attendance.modified_person + "' " +
-                                    "data-work-status='" + attendance.workform_status + "'>" + // 근무 상태 추가
-                                    "수정</button></td>" +
-                                    "<td>" +
-                                    "<button class='btn btn-danger delete-button' data-id='" + attendance.attendance_id + "' style='margin-left: 5px;'>삭제</button>" + // 수정 버튼 옆에 삭제 버튼 추가
-                	            	"</td>" +
-                                    
-                                    
-                                    "</tr>"
+                            		"<tr>" +
+                            	    "<td>" + (attendance.emp_id || "-") + "</td>" +
+                            	    "<td>" + (attendance.emp_cid || "-") + "</td>" +
+                            	    "<td>" + (attendance.check_in || "-") + "</td>" +
+                            	    "<td>" + (attendance.check_out || "-") + "</td>" +
+                            	    "<td>" + (attendance.workingoutside_time || "-") + "</td>" +
+                            	    "<td>" + (attendance.return_time || "-") + "</td>" +
+                            	    "<td>" + (attendance.working_time || "-") + "</td>" +
+                            	    "<td>" + (attendance.night_work_time || "-") + "</td>" +
+                            	    "<td>" + (attendance.special_working_time || "-") + "</td>" +
+                            	    "<td>" + (attendance.workform_status || "-") + "</td>" +
+                            	    "<td>" + (attendance.new_check_in || "-") + "</td>" +
+                            	    "<td>" + (attendance.new_check_out || "-") + "</td>" +
+                            	    "<td>" + (attendance.new_workingoutside_time || "-") + "</td>" +
+                            	    "<td>" + (attendance.modified_time || "-") + "</td>" +
+                            	    "<td>" + (attendance.created_at || "-") + "</td>" +
+                            	    "<td>" + (attendance.attendance_id || "-") + "</td>" +
+                            	    "<td>" + (attendance.status || "-") + "</td>" +
+                            	    "<td>" + (attendance.overtime || "-") + "</td>" +
+                            	    "<td>" + (attendance.businessDate || "-") + "</td>" +
+                            	    "<td>" + (attendance.business_endDate || "-") + "</td>" +
+                            	    "<td>" + (attendance.educationDate || "-") + "</td>" +
+                            	    "<td>" + (attendance.education_endDate || "-") + "</td>" +
+                            	    "<td>" + (attendance.modified_reason || "-") + "</td>" +
+                            	    "<td>" + (attendance.modified_person || "-") + "</td>" +
+                            	    "<td>" +
+                            	        "<button class='btn btn-warning edit-button' data-id='" + attendance.attendance_id + "' " +
+                            	        "data-emp-id='" + attendance.emp_id + "' " +
+                            	        "data-check-in='" + attendance.check_in + "' " +
+                            	        "data-check-out='" + attendance.check_out + "' " +
+                            	        "data-workingoutside-time='" + attendance.workingoutside_time + "' " +
+                            	        "data-return-time='" + attendance.return_time + "' " +
+                            	        "data-working-time='" + attendance.working_time + "' " +
+                            	        "data-night-work-time='" + attendance.night_work_time + "' " +
+                            	        "data-special-working-time='" + attendance.special_working_time + "' " +
+                            	        "data-new-check-in='" + attendance.new_check_in + "' " +
+                            	        "data-new-check-out='" + attendance.new_check_out + "' " +
+                            	        "data-new-workingoutside-time='" + attendance.new_workingoutside_time + "' " +
+                            	        "data-modified-time='" + attendance.modified_time + "' " +
+                            	        "data-created-at='" + attendance.created_at + "' " +
+                            	        "data-status='" + attendance.status + "' " +
+                            	        "data-overtime='" + attendance.overtime + "' " +
+                            	        "data-businessDate='" + attendance.businessDate + "' " +
+                            	        "data-business-endDate='" + attendance.business_endDate + "' " +
+                            	        "data-educationDate='" + attendance.educationDate + "' " +
+                            	        "data-education-endDate='" + attendance.education_endDate + "' " +
+                            	        "data-modified-reason='" + attendance.modified_reason + "' " +
+                            	        "data-modified-person='" + attendance.modified_person + "' " +
+                            	        "data-work-status='" + attendance.workform_status + "'>" + 
+                            	        "수정</button>" +
+                            	    "</td>" +
+                            	    "<td>" +
+                            	        "<button class='btn btn-danger delete-button' data-id='" + attendance.attendance_id + "' style='margin-left: 5px;'>삭제</button>" +
+                            	    "</td>" +
+                            	"</tr>"
                                 );
                             });
 
@@ -405,6 +437,13 @@
         $("#modalCreatedAtInput").val($(this).data("created-at"));
         $("#modalStatusInput").val($(this).data("status"));
         $("#modalOvertimeInput").val($(this).data("overtime"));
+        
+        $("#modalBusinessDateInput").val($(this).data("businessDate"));
+        $("#modalBusinessEndDateInput").val($(this).data("business-endDate"));
+        $("#modalEducationDateInput").val($(this).data("educationDate"));
+        $("#modalEducationEndDateInput").val($(this).data("education-endDate"));
+        
+        
         $("#modalModifiedReasonInput").val($(this).data("modified-reason"));
         $("#modalModifiedPersonInput").val($(this).data("modified-person"));
         $("#modalWorkformStatusInput").val($(this).data("workform-status")); // 근무 상태 추가
@@ -431,6 +470,13 @@
                var createdAt = $("#modalCreatedAtInput").val();
                var status = $("#modalStatusInput").val();
                var overtime = $("#modalOvertimeInput").val();
+               
+               var businessDate = $("modalBusinessDateInput").val();
+               var businessEndDate = $("#modalBusinessEndDateInput").val();
+               var educationDate = $("#modalEducationDateInput").val();
+               var educationEndDate = $("#modalEducationEndDateInput").val();
+               
+               
                var modifiedReason = $("#modalModifiedReasonInput").val();
                var modifiedPerson = $("#modalModifiedPersonInput").val();
                var workformStatus = $("#modalWorkformStatusInput").val(); // 근무 상태 추가
@@ -455,8 +501,14 @@
 					        new_WorkingOutside_time: newWorkingOutsideTime,
 					        modified_time: modifiedTime,
 					        created_at: createdAt,
-					        status: status,
+					        status: status,					        
 					        overtime: overtime,
+					        
+					        businessDate : businessDate,
+					        business_endDate : businessEndDate,
+					        educationDate: educationDate,
+					        education_endDate: educationEndDate,
+					        
 					        modified_reason: modifiedReason,
 					        modified_person: modifiedPerson,
 					        workform_status: workformStatus // 근무 상태 추가

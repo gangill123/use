@@ -95,6 +95,10 @@ public class LeaveDAOImpl implements LeaveDAO {
 		return sqlSession.selectList(NAMESPACE+".findLeaveByEmpId", emp_id);
 		
 	}
+	  @Override
+	    public void updateLeaveInfo(LeaveVO leaveVO) {
+	        sqlSession.update(NAMESPACE+".updateLeaveInfo", leaveVO); // 매퍼 쿼리 호출
+	    }
 	
 	
 }

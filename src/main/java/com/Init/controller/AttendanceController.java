@@ -1,6 +1,8 @@
 package com.Init.controller;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -26,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.Init.domain.AttendanceVO;
-import com.Init.domain.LeaveVO;
 import com.Init.service.AttendanceService;
 
 @Controller
@@ -106,20 +107,7 @@ public class AttendanceController {
 		}
 	}
 
-//    @GetMapping("/calculateWorkingTime")
-//    public ResponseEntity<Map<String, Object>> calculateWorkingTime(HttpSession session) {
-//        String emp_id = (String) session.getAttribute("emp_id");
-//        Map<String, Object> response = new HashMap<>();
-//        
-//        // 근무 시간을 자동으로 계산하고 업데이트
-//        attendanceService.calculateAndUpdateWorkingTime(emp_id);
-//        
-//        response.put("status", "success");
-//        response.put("message", "근무 시간이 성공적으로 업데이트되었습니다.");
-//
-//        return ResponseEntity.ok(response);
-//    }
-//
+
 
 	@GetMapping("/calculateWorkingTime")
 	public ResponseEntity<Map<String, Object>> calculateWorkingTime(HttpSession session) {
@@ -164,11 +152,14 @@ public class AttendanceController {
 		int totalItems = attendanceService.getTotalCheckTimeCount(emp_id); // 전체 항목 수 가져오기
 
 		List<Map<String, Object>> attendanceDataList = new ArrayList<>();
-
+		
+	
 		// AttendanceVO 리스트를 Map으로 변환하여 포맷팅
 		for (AttendanceVO attendance : attendanceList) {
 			Map<String, Object> attendanceData = new HashMap<>();
-
+			
+			
+			
 			// 포맷된 데이터 추가
 			attendanceData.put("check_in", formatTimestamp(attendance.getCheck_in()));
 			attendanceData.put("check_out", formatTimestamp(attendance.getCheck_out()));
@@ -180,7 +171,7 @@ public class AttendanceController {
 			attendanceData.put("modified_time", formatTimestamp(attendance.getModified_time()));
 			attendanceData.put("created_at", formatTimestamp(attendance.getCreated_at()));
 
-			// 원본 데이터 추가
+			// 원본 데이터 추가 
 			attendanceData.put("attendance_id", attendance.getAttendance_id());
 			attendanceData.put("emp_id", attendance.getEmp_id());
 			attendanceData.put("emp_cid", attendance.getEmp_cid());
@@ -192,6 +183,13 @@ public class AttendanceController {
 			attendanceData.put("modified_reason", attendance.getModified_reason());
 			attendanceData.put("modified_person", attendance.getModified_person());
 			attendanceData.put("workform_status", attendance.getWorkform_status());
+			
+			   // 날짜 데이터 포맷팅
+		    attendanceData.put("businessDate", formatDate(attendance.getBusinessDate()));
+		    attendanceData.put("business_endDate", formatDate(attendance.getBusiness_endDate()));
+		    attendanceData.put("educationDate", formatDate(attendance.getEducationDate()));
+		    attendanceData.put("education_endDate", formatDate(attendance.getEducation_endDate()));
+
 
 			attendanceDataList.add(attendanceData);
 		}
@@ -205,6 +203,15 @@ public class AttendanceController {
 
 		return response;
 	}
+	
+	private String formatDate(Date date) {
+	    if (date != null) {
+	        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	        return dateFormat.format(date);
+	    }
+	    return null; // 또는 적절한 기본값
+	}
+	
 
 	// Timestamp를 포맷된 문자열로 변환하는 메서드
 	private String formatTimestamp(Timestamp timestamp) {
@@ -319,6 +326,17 @@ public class AttendanceController {
         }
     }
   
+
+    @PostMapping("/applyBusinessTrip")
+    public ResponseEntity<String> applyBusinessTrip(@RequestBody AttendanceVO attendanceVO) {
+        try {
+            attendanceService.applyBusinessTrip(attendanceVO);
+            return ResponseEntity.ok("신청이 성공적으로 처리되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("신청 처리 중 오류가 발생했습니다.");
+        }
+    }
+    
     
     
     

@@ -56,6 +56,8 @@ public interface AttendanceService {
 	public List<AttendanceVO> getAttendanceByEmpId(String emp_id);
 
 	public void updateAttendanceRecordA(AttendanceVO attendanceVO);
+
+	public void applyBusinessTrip(AttendanceVO attendanceVO);
     
     
 	

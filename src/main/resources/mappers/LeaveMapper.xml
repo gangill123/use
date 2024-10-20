@@ -74,7 +74,7 @@
 		lm.total_annual_leave,
 		lm.used_annual_leave,
 		lm.remaining_annual_leave,
-		lm.Lgrant,
+		lm.lgrant,
 		lm.expiry,
 		lm.adjustment,
 		lm.adjustmentDate,
@@ -100,22 +100,33 @@
 	<insert id="insertLeaveRequest"
 		parameterType="com.Init.domain.LeaveVO">
 		INSERT INTO leave_management (
-		emp_id,
-		annual_leave_start_date,
-		end_annual_leave,
-		used_annual_leave,
-		leave_type,
-		leave_status,
-		reason
-		) VALUES (
-		#{emp_id},
-		#{annual_leave_start_date},
-		#{end_annual_leave},
-		#{used_annual_leave},
-		#{leave_type},
-		#{leave_status},
-		#{reason}
-		);
+	          emp_id,
+            leave_type,
+            annual_leave_start_date,           
+            end_annual_leave,
+            used_annual_leave,
+            total_annual_leave,
+            remaining_annual_leave,
+            lgrant,
+            expiry,
+            adjustment,
+            leave_status,
+            reason
+        ) VALUES (
+            #{emp_id},
+            #{leave_type},
+            #{annual_leave_start_date},
+            #{end_annual_leave},
+            #{used_annual_leave},
+            #{total_annual_leave},
+            #{remaining_annual_leave},
+            #{lgrant},
+            #{expiry},
+            #{adjustment},
+            #{leave_status},
+            #{reason}
+            
+        )
 	</insert>
 
 	<!-- 사원의 연차 정보를 가져오는 메서드 -->
@@ -173,6 +184,8 @@
 		FROM leave_management
 		WHERE emp_id = #{emp_id};
 	</select>
+	
+	
 
 
 </mapper>

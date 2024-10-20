@@ -146,6 +146,7 @@ public class AttendanceDAOImpl implements AttendanceDAO {
     public int updateWorkingOutsideTime(AttendanceVO attendanceVO) {
         return sqlSession.update(NAMESPACE+".updateWorkingOutsideTime", attendanceVO);
     }
+	
 
     @Override
     public int updateReturnTime(AttendanceVO attendanceVO) {
@@ -159,5 +160,10 @@ public class AttendanceDAOImpl implements AttendanceDAO {
     @Override
     public void updateAttendanceA(AttendanceVO attendanceVO) {
         sqlSession.update(NAMESPACE+".updateAttendanceA", attendanceVO);
+    }
+    @Override
+    public void insertBusinessTrip(AttendanceVO attendanceVO) {
+    	sqlSession.insert(NAMESPACE + ".insertBusinessTrip", attendanceVO);
+    	
     }
 }

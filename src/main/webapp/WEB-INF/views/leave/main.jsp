@@ -70,15 +70,34 @@
                  <div class="card-title">휴가 관리</div>
 
 <%
+    // 세션에서 값 가져오기
     String empId = (String) session.getAttribute("emp_id"); // 세션에서 사원 번호 가져오기
     Integer remainingAnnualLeave = (Integer) session.getAttribute("remainingAnnualLeave"); // 세션에서 잔여 연차 가져오기
-  
-    
+    Integer totalAnnualLeave = (Integer) session.getAttribute("totalAnnualLeave"); // 총 연차 가져오기
+    Integer usedAnnualLeave = (Integer) session.getAttribute("usedAnnualLeave"); // 사용한 연차 가져오기
+    Integer lgrant = (Integer) session.getAttribute("lgrant"); // 연차 부여 값 가져오기
+    Integer expiry = (Integer) session.getAttribute("expiry"); // 연차 소멸 값 가져오기
+    Integer adjustment = (Integer) session.getAttribute("adjustment"); // 연차 조정 값 가져오기
+
     // 세션에 값이 없을 경우 기본값 설정
     if (remainingAnnualLeave == null) {
         remainingAnnualLeave = 0; // 기본값 설정 (예: 0일)
     }
-   
+    if (totalAnnualLeave == null) {
+        totalAnnualLeave = 0; // 기본값 설정
+    }
+    if (usedAnnualLeave == null) {
+        usedAnnualLeave = 0; // 기본값 설정
+    }
+    if (lgrant == null) {
+        lgrant = 0; // 기본값 설정
+    }
+    if (expiry == null) {
+        expiry = 0; // 기본값 설정
+    }
+    if (adjustment == null) {
+        adjustment = 0; // 기본값 설정
+    }
 %>
 
 <button class="btn1 btn-primary" onclick="openLeaveModal()">
@@ -111,6 +130,31 @@
                 <input type="number" id="usedLeave" name="used_annual_leave" class="form-control" 
                        placeholder="사용할 연차 일수를 입력하세요." required>
             </div>
+			           <div class="form-group">
+			    <label for="totalLeave">총 연차:</label>
+			    <input type="number" id="totalLeave" name="total_annual_leave" class="form-control" 
+			           value="15" readonly required> <!-- 기본값 예시로 20일 설정 -->
+			</div>
+			<div class="form-group">
+			    <label for="remainingLeave">잔여 연차:</label>
+			    <input type="number" id="remainingLeave" name="remaining_annual_leave" class="form-control" 
+			           value="20" readonly required> <!-- 초기 잔여 연차 설정 -->
+			</div>
+			<div class="form-group">
+			    <label for="lgrant">연차 부여:</label>
+			    <input type="number" id="lgrant" name="lgrant" class="form-control" 
+			           value="0" readonly required> <!-- 기본값 설정 -->
+			</div>
+			<div class="form-group">
+			    <label for="expiry">연차 소멸:</label>
+			    <input type="number" id="expiry" name="expiry" class="form-control" 
+			           value="0" readonly required> <!-- 기본값 설정 -->
+			</div>
+			<div class="form-group">
+			    <label for="adjustment">연차 조정:</label>
+			    <input type="number" id="adjustment" name="adjustment" class="form-control" 
+			           value="0" readonly required> <!-- 기본값 설정 -->
+			</div>
             <div class="form-group">
                 <label for="leaveType">휴가 종류:</label>
                 <select id="leaveType" name="leave_type" class="form-control" required>
@@ -127,68 +171,95 @@
                 <label for="reason">신청 사유:</label>
                 <textarea id="reason" name="reason" class="form-control" rows="4" required></textarea>
             </div>
-		
-      
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">신청</button>
-                    <button type="button" class="btn btn-secondary" onclick="closeLeaveModal()">닫기</button>
-                </div>
         </form>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" onclick="submitLeaveForm()">신청</button>
+            <button type="button" class="btn btn-secondary" onclick="closeLeaveModal()">닫기</button>
+        </div>
     </div>
 </div>
 
 <script>
 function openLeaveModal() {
-    // 모달 열기
     document.getElementById("leaveModal").style.display = "block";
 }
 
 function closeLeaveModal() {
-    // 모달 닫기
     document.getElementById("leaveModal").style.display = "none";
 }
 
-// 폼 제출 시 처리
-document.getElementById("leaveForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // 폼 기본 동작 막기
+// 사용 연차 입력 시 잔여 연차 자동 계산
+document.getElementById("usedLeave").addEventListener("input", function() {
+    const totalLeave = parseInt(document.getElementById("totalLeave").value);
+    const usedLeave = parseInt(this.value) || 0; // 현재 입력된 값 또는 0
+    const remainingLeave = totalLeave - usedLeave;
 
+    // 잔여 연차를 업데이트
+    document.getElementById("remainingLeave").value = remainingLeave >= 0 ? remainingLeave : 0; // 잔여 연차가 음수가 되지 않도록
+});
+
+// 연차 신청서 제출 함수
+function submitLeaveForm() {
     // 입력된 값 가져오기
     const empId = document.getElementById("empId").value;
     const annualLeaveStartDate = document.getElementById("annualLeaveStartDate").value;
-    const endAnnualLeave = document.getElementById("endAnnualLeave").value; // 연차 종료일 값 가져오기
-    const usedLeave = document.getElementById("usedLeave").value; // 사용 연차 값 가져오기
-    const leaveType = document.getElementById("leaveType").value; // 휴가 종류 값 가져오기
-    const leaveStatus = document.getElementById("leaveStatus").value; // 결재 상태 값 가져오기
+    const endAnnualLeave = document.getElementById("endAnnualLeave").value;
+    const usedLeave = parseInt(document.getElementById("usedLeave").value);
+    const totalLeave = parseInt(document.getElementById("totalLeave").value);
+    const remainingLeave = parseInt(document.getElementById("remainingLeave").value);
+    const lgrant = parseInt(document.getElementById("lgrant").value);
+    const expiry = parseInt(document.getElementById("expiry").value);
+    const adjustment = parseInt(document.getElementById("adjustment").value);
+    const leaveType = document.getElementById("leaveType").value;
+    const leaveStatus = document.getElementById("leaveStatus").value;
     const reason = document.getElementById("reason").value;
+
+    // 유효성 검사
+    if (!annualLeaveStartDate || !endAnnualLeave) {
+        alert("연차 시작일과 종료일을 모두 입력해야 합니다.");
+        return;
+    }
+
+    if (new Date(endAnnualLeave) < new Date(annualLeaveStartDate)) {
+        alert("연차 종료일은 시작일 이후여야 합니다.");
+        return;
+    }
+
+    if (usedLeave <= 0) {
+        alert("사용 연차는 1일 이상이어야 합니다.");
+        return;
+    }
 
     // AJAX 요청
     $.ajax({
         type: "POST",
-        url: "use", // 서버의 API 엔드포인트 (연차 사용)
-        contentType: "application/json", // JSON 형태로 전송
+        url: "use",
+        contentType: "application/json",
         data: JSON.stringify({
             emp_id: empId,
             annual_leave_start_date: annualLeaveStartDate,
             end_annual_leave: endAnnualLeave,
-            used_annual_leave: usedLeave, // 사용 연차 추가
-            leave_type: leaveType, // 휴가 종류 추가
-            leave_status: leaveStatus, // 결재 상태 추가
+            used_annual_leave: usedLeave,
+            total_annual_leave: totalLeave,
+            remaining_annual_leave: remainingLeave,
+            lgrant: lgrant,
+            expiry: expiry,
+            adjustment: adjustment,
+            leave_type: leaveType,
+            leave_status: leaveStatus,
             reason: reason
         }),
         success: function(response) {
-            // 요청이 성공했을 때의 처리
             console.log("연차 신청이 완료되었습니다:", response);
-            alert("연차 신청이 완료되었습니다"); // 알림창으로 결과 보여주기
-            
-            closeLeaveModal(); // 성공한 후에 모달 닫기
+            alert("연차 신청이 완료되었습니다");
+            closeLeaveModal();
         },
         error: function(xhr, status, error) {
-            // 요청이 실패했을 때의 처리
             console.error("신청 실패:", error);
-            alert("신청 실패: " + error); // 에러 메시지 보여주기
+            alert("신청 실패: " + error);
         }
     });
-});
+}
 </script>
 				
 				
@@ -221,10 +292,11 @@ document.getElementById("leaveForm").addEventListener("submit", function(event) 
                     <div class="form-group">
                         <label for="leave_type">휴가 유형</label>
                         <select class="form-control" id="leave_type" name="leave_type" required>
-                            <option value="연차">출산 휴가</option>
+                            <option value="출산 휴가">출산 휴가</option>
                             <option value="병가">병가</option>
                             <option value="특별휴가">특별휴가</option>
                             <option value="여름휴가">하계휴가</option>
+                            <option value="기타">기타</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -237,7 +309,7 @@ document.getElementById("leaveForm").addEventListener("submit", function(event) 
                     </div>
                     <div class="form-group">
                         <label for="total_leave_days">총 휴가 일수</label>
-                        <input type="number" class="form-control" id="total_leave_days" name="total_leave_days" required>
+                        <input type="number" class="form-control" id="total_leave_days" name="total_leave_days" readonly required>
                     </div>
                     <div class="form-group">
                         <label for="leave_status">결재 상태</label>
@@ -268,9 +340,37 @@ function closeLeaveRequestModal() {
     $('#leaveRequestModal').modal('hide'); // Bootstrap의 모달을 수동으로 닫기
 }
 
+// 휴가 시작일과 종료일 비교
+function validateDates() {
+    const startDate = new Date(document.getElementById("leave_start_date").value);
+    const endDate = new Date(document.getElementById("end_leave_date").value);
+
+    if (startDate > endDate) {
+        alert("휴가 시작일은 종료일보다 늦을 수 없습니다."); // 에러 메시지
+        return false;
+    }
+    return true;
+}
+
+// 총 휴가 일수 계산
+function calculateTotalLeaveDays() {
+    const startDate = new Date(document.getElementById("leave_start_date").value);
+    const endDate = new Date(document.getElementById("end_leave_date").value);
+
+    if (startDate && endDate && startDate <= endDate) {
+        const totalDays = (endDate - startDate) / (1000 * 3600 * 24) + 1; // 시작일 포함
+        document.getElementById("total_leave_days").value = totalDays;
+    }
+}
+
 // 폼 제출 시 처리
 document.getElementById("leaveRequestForm").addEventListener("submit", function(event) {
     event.preventDefault(); // 폼 기본 동작 막기
+
+    // 날짜 유효성 검사
+    if (!validateDates()) {
+        return; // 유효성 검사 실패 시 종료
+    }
 
     // 입력된 값 가져오기
     const empId = document.getElementById("empId").value;
@@ -298,7 +398,7 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
         success: function(response) {
             // 요청이 성공했을 때의 처리
             console.log("휴가 신청이 완료되었습니다:", response);
-            alert("휴가 신청이 완료되었습니다:"); // 알림창으로 결과 보여주기
+            alert("휴가 신청이 완료되었습니다."); // 알림창으로 결과 보여주기
             closeLeaveRequestModal(); // 성공한 후에 모달 닫기
         },
         error: function(xhr, status, error) {
@@ -308,6 +408,10 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
         }
     });
 });
+
+// 이벤트 리스너 추가: 시작일 및 종료일 변경 시 총 휴가 일수 계산
+document.getElementById("leave_start_date").addEventListener("change", calculateTotalLeaveDays);
+document.getElementById("end_leave_date").addEventListener("change", calculateTotalLeaveDays);
 </script>
 
 
@@ -359,7 +463,7 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
                     </div>
                     <div class="form-group">
                         <label for="total_leave_days_leave">총 휴직 일수</label>
-                        <input type="number" class="form-control" id="total_leave_days_leave" name="total_leave_days" required>
+                        <input type="number" class="form-control" id="total_leave_days_leave" name="total_leave_days" required readonly>
                     </div>
                     <div class="form-group">
                         <label for="leave_status_leave">결재 상태</label>
@@ -392,9 +496,35 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
         $('#leaveApplicationModal').modal('hide'); // Bootstrap의 모달을 수동으로 닫기
     }
 
+    // 휴직 시작일과 종료일 간의 유효성 검사
+    function validateLeaveDates() {
+        const startDate = new Date(document.getElementById("leave_start_date_leave").value);
+        const endDate = new Date(document.getElementById("end_leave_date_leave").value);
+        if (endDate < startDate) {
+            alert("휴직 종료일은 시작일보다 이후여야 합니다.");
+            return false;
+        }
+        return true;
+    }
+
+    // 총 휴직 일수 자동 계산
+    function calculateTotalLeaveDays() {
+        const startDate = new Date(document.getElementById("leave_start_date_leave").value);
+        const endDate = new Date(document.getElementById("end_leave_date_leave").value);
+        if (!isNaN(startDate) && !isNaN(endDate)) {
+            const totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1; // +1 to include start date
+            document.getElementById("total_leave_days_leave").value = totalDays;
+        }
+    }
+
     // 휴직 폼 제출 시 처리
     document.getElementById("leaveApplicationForm").addEventListener("submit", function(event) {
         event.preventDefault(); // 폼 기본 동작 막기
+
+        // 날짜 유효성 검사
+        if (!validateLeaveDates()) {
+            return; // 유효성 검사 실패 시 제출 중단
+        }
 
         // 입력된 값 가져오기
         const empId = document.getElementById("empIdLeave").value;
@@ -432,6 +562,10 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
             }
         });
     });
+
+    // 날짜 선택 시 총 휴직 일수 계산
+    document.getElementById("leave_start_date_leave").addEventListener("change", calculateTotalLeaveDays);
+    document.getElementById("end_leave_date_leave").addEventListener("change", calculateTotalLeaveDays);
 </script>
 
 
@@ -522,19 +656,19 @@ function closeLeaveStatusModal() {
         // 테이블에 한 행 추가
         data.forEach(leave => {
             leaveInfoTableBody.innerHTML +=
-                "<tr>" + // 각 leave 정보를 새로운 행으로 시작
-                    "<td>" + leave.emp_id + "</td>" +
-                    "<td>" + leave.total_annual_leave + "</td>" +
-                    "<td>" + leave.used_annual_leave + "</td>" +
-                    "<td>" + leave.remaining_annual_leave + "</td>" +
-                    "<td>" + leave.total_leave_days + "</td>" +
-                    "<td>" + leave.used_leave + "</td>" +
-                    "<td>" + leave.remaining_leave + "</td>" +
-                    "<td>" + leave.leave_type + "</td>" +
-                    "<td>" + leave.leave_start_date + "</td>" +
-                    "<td>" + leave.leave_end_date + "</td>" +
-                    "<td>" + leave.leave_status + "</td>" +
-                "</tr>"; // 행을 닫음
+            	"<tr>" + // 각 leave 정보를 새로운 행으로 시작
+                "<td>" + (leave.emp_id || "-") + "</td>" +  // emp_id가 null일 경우 "없음" 표시
+                "<td>" + (leave.total_annual_leave || "-") + "</td>" +  // total_annual_leave가 null일 경우 "없음" 표시
+                "<td>" + (leave.used_annual_leave || "-") + "</td>" +  // used_annual_leave가 null일 경우 "없음" 표시
+                "<td>" + (leave.remaining_annual_leave || "-") + "</td>" +  // remaining_annual_leave가 null일 경우 "없음" 표시
+                "<td>" + (leave.total_leave_days || "-") + "</td>" +  // total_leave_days가 null일 경우 "없음" 표시
+                "<td>" + (leave.used_leave || "-") + "</td>" +  // used_leave가 null일 경우 "없음" 표시
+                "<td>" + (leave.remaining_leave || "-") + "</td>" +  // remaining_leave가 null일 경우 "없음" 표시
+                "<td>" + (leave.leave_type || "-") + "</td>" +  // leave_type가 null일 경우 "없음" 표시
+                "<td>" + (leave.leave_start_date || "-") + "</td>" +  // leave_start_date가 null일 경우 "없음" 표시
+                "<td>" + (leave.end_leave_date || "-") + "</td>" +  // end_leave_date가 null일 경우 "없음" 표시
+                "<td>" + (leave.leave_status || "-") + "</td>" +  // leave_status가 null일 경우 "없음" 표시
+            "</tr>"; // 행을 닫음
         });
     }
 </script>
@@ -694,20 +828,31 @@ function closeLeaveStatusModal() {
                     $('#leaveTableBody').append('<tr><td colspan="7">연차 정보가 없습니다. 로그인 상태를 확인해주세요.</td></tr>');
                 } else {
                     // 데이터가 있을 경우
+                    let hasValidData = false; // 유효한 데이터가 있는지 체크하는 플래그
                     data.forEach(function(leave) {
-                        // 각 leave 정보의 필드를 적절하게 사용하여 테이블 행을 추가
-                    	$('#leaveTableBody').append(
-                    		    '<tr>' +
-                    		        '<td>' + (leave.annual_leave_start_date) + '</td>' +
-                    		        '<td>' + (leave.lgrant) + '</td>' +
-                    		        '<td>' + (leave.total_annual_leave) + '</td>' +
-                    		        '<td>' + (leave.expiry) + '</td>' +
-                    		        '<td>' + (leave.adjustment ) + '</td>' +
-                    		        '<td>' + (leave.used_annual_leave) + '</td>' +
-                    		        '<td>' + (leave.remaining_annual_leave ) + '</td>' +
-                    		    '</tr>'
-                    		);
+                        // 각 leave 정보의 필드를 체크하여 유효한 데이터인지 확인
+                        if (leave.annual_leave_start_date || leave.lgrant || leave.total_annual_leave || 
+                            leave.expiry || leave.adjustment || leave.used_annual_leave || 
+                            leave.remaining_annual_leave) {
+                            hasValidData = true; // 유효한 데이터가 있는 경우 플래그를 true로 변경
+                            $('#leaveTableBody').append(
+                                '<tr>' +
+                                    '<td>' + (leave.annual_leave_start_date || '-') + '</td>' +
+                                    '<td>' + (leave.lgrant || '-') + '</td>' +
+                                    '<td>' + (leave.total_annual_leave || '-') + '</td>' +
+                                    '<td>' + (leave.expiry || '-') + '</td>' +
+                                    '<td>' + (leave.adjustment || '-') + '</td>' +
+                                    '<td>' + (leave.used_annual_leave || '-') + '</td>' +
+                                    '<td>' + (leave.remaining_annual_leave || '-') + '</td>' +
+                                '</tr>'
+                            );
+                        }
                     });
+
+                    // 유효한 데이터가 없을 경우 메시지 표시
+                    if (!hasValidData) {
+                        $('#leaveTableBody').append('<tr><td colspan="7">유효한 연차 정보가 없습니다.</td></tr>');
+                    }
                 }
             },
             error: function(xhr, status, error) {

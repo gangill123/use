@@ -34,10 +34,10 @@ public class LeaveVO {
     private Date end_annual_leave; 
 
     // 총 연차 일수 관련 필드
-    private int total_annual_leave;  // 총 나의 연차
     private int used_annual_leave;  //  사용 연차
+    private int total_annual_leave;  // 총 나의 연차
     private int remaining_annual_leave; //잔여 연차
-    private int Lgrant; // 연차 부여 
+    private int lgrant; // 연차 부여 
     private int expiry; // 연차 소멸
     private int adjustment; // 연차 조정
   

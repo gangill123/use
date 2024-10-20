@@ -144,8 +144,14 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<AttendanceVO> getAttendanceByEmpId(String emp_id) {
         return attendanceDAO.getAttendanceByEmpId(emp_id);
     }
+    @Override
     public void updateAttendanceRecordA(AttendanceVO attendanceVO) {
         attendanceDAO.updateAttendanceA(attendanceVO); // DAO 호출
+    }
+    @Override
+    public void applyBusinessTrip(AttendanceVO attendanceVO) {
+        // 필요한 데이터 검증 및 처리 로직 추가
+        attendanceDAO.insertBusinessTrip(attendanceVO);
     }
 
 }

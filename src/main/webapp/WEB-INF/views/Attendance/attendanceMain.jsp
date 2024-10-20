@@ -103,7 +103,7 @@
 <button class="btn1 btn-primary" data-toggle="modal"
 	data-target="#overtimeModal">
 	<span class="btn-label"> <i class="fa fa-bookmark"></i>
-	</span> 초과 근무 신청서
+	</span> 초과/야간/특근 신청서
 </button>
 
 
@@ -112,13 +112,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="overtimeModalLabel">초과 근무 신청서</h5>
+                <h5 class="modal-title" id="overtimeModalLabel">초과/야간/특근 신청서</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="overtimeForm">
+                <form id="overtimeForm"  onsubmit="event.preventDefault(); submitOvertimeForm();">
                     <div class="form-group">
                         <label for="emp_id">사원 ID</label>
                         <input type="text" class="form-control" id="emp_id" name="emp_id" value="<%= empId %>" readonly>
@@ -127,6 +127,8 @@
                         <label for="workform_status">근태 상태</label>
                         <select class="form-control" id="workform_status" name="workform_status" required>
                             <option value="초과근무">초과근무</option>
+                            <option value="야간근무">야간근무</option>
+                            <option value="특근근무">특근근무</option>
                         </select>
                     </div>
             			
@@ -151,6 +153,15 @@
                         <label for="overtime">초과 시간</label>
                         <input type="number" class="form-control" id="overtime" name="overtime" placeholder="초과 시간을 입력하세요" required>
                     </div>
+					<div class="form-group">
+                        <label for="overtime">야간 시간</label>
+                        <input type="number" class="form-control" id="night_work_time" name="night_work_time" placeholder="야간근무한 시간을 입력하세요" required>
+                    </div>
+					<div class="form-group">
+                        <label for="overtime">특근 시간</label>
+                        <input type="number" class="form-control" id="special_working_time" name="special_working_time" placeholder="특근한 시간을 입력하세요" required>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="status">상태</label>
                         <select class="form-control" id="status" name="status" required>
@@ -172,8 +183,47 @@
 </div>
 
 <script>
+function validateForm() {
+    // 입력 필드 값 가져오기
+    const createdAt = document.getElementById('created_at').value;
+    const checkIn = document.getElementById('check_in').value;
+    const checkOut = document.getElementById('check_out').value;
+
+    // 날짜 형식 정규 표현식
+    const datePattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+
+    // 유효성 검사
+    if (!createdAt || !datePattern.test(createdAt)) {
+        alert('신청 날짜 및 시간은 yyyy-MM-dd HH:mm:ss 형식이어야 합니다.');
+        return false;
+    }
+
+    if (!checkIn || !datePattern.test(checkIn)) {
+        alert('출근 시간은 yyyy-MM-dd HH:mm:ss 형식이어야 합니다.');
+        return false;
+    }
+
+    if (!checkOut || !datePattern.test(checkOut)) {
+        alert('퇴근 시간은 yyyy-MM-dd HH:mm:ss 형식이어야 합니다.');
+        return false;
+    }
+
+    // 출근 시간이 퇴근 시간보다 이전인지 확인
+    if (new Date(checkIn) >= new Date(checkOut)) {
+        alert('출근 시간은 퇴근 시간보다 이전이어야 합니다.');
+        return false;
+    }
+
+    // 모든 유효성 검사 통과
+    return true;
+}
+
 // 서버에 폼 데이터를 제출하는 함수
 function submitOvertimeForm() {
+    // 유효성 검사 수행
+    if (!validateForm()) {
+        return; // 유효성 검사 실패 시 함수 종료
+    }
     // 폼 요소 가져오기
     const form = document.getElementById('overtimeForm');
     const formData = new FormData(form);
@@ -201,12 +251,12 @@ function submitOvertimeForm() {
     })
     .then(function(data) {
         // 서버 응답 처리
-        alert('초과 근무 신청이 성공적으로 제출되었습니다.');
+        alert('신청서가 성공적으로 제출되었습니다.');
         
         form.reset(); // 폼 초기화
     })
     .catch(function(error) {
-    	alert('초과 근무 신청이 성공적으로 제출되었습니다.');
+    	alert('신청서가 성공적으로 제출되었습니다.');
         $('#overtimeModal').modal('hide'); // 모달 닫기
         form.reset(); // 폼 초기화
     });
@@ -246,7 +296,11 @@ function submitOvertimeForm() {
                                 <th>신청일</th>
                                 <th>야근 시간</th>
                                 <th>특근 시간</th>
-                                <th>수정 요청 이유</th>
+                                <th>신청  이유</th>
+                                <th>출장 시작 날짜</th>
+                                <th>출장 종료 날짜</th>
+                                <th>교육 시작 날짜</th>
+                                <th>교육 종료 날짜</th>                      
                                 <th>상태</th>
                             </tr>
                         </thead>
@@ -298,27 +352,29 @@ function displayAttendanceInfo(data) {
     
     data.forEach(attendance => {
         attendanceInfoTableBody.innerHTML +=
-            "<tr>" +
-            "<td>" + attendance.attendance_id + "</td>" +
-            "<td>" + attendance.emp_id + "</td>" +
-            "<td>" + attendance.check_in + "</td>" +
-            "<td>" + attendance.check_out + "</td>" +
-            "<td>" + attendance.new_check_in + "</td>" +
-            "<td>" + attendance.new_check_out + "</td>" +
-            "<td>" + attendance.workform_status + "</td>" +
-            "<td>" + attendance.overtime + "</td>" +
-            "<td>" + attendance.created_at + "</td>" +
-            "<td>" + attendance.night_work_time + "</td>" +
-            "<td>" + attendance.special_working_time + "</td>" +
-            "<td>" + attendance.modified_reason + "</td>" +
-            "<td>" + attendance.status + "</td>" +
-            "</tr>";
+        	"<tr>" +
+            "<td>" + (attendance.attendance_id || "-") + "</td>" +
+            "<td>" + (attendance.emp_id || "-") + "</td>" +
+            "<td>" + (attendance.check_in || "-") + "</td>" +
+            "<td>" + (attendance.check_out || "-") + "</td>" +
+            "<td>" + (attendance.new_check_in || "-") + "</td>" +
+            "<td>" + (attendance.new_check_out || "-") + "</td>" +
+            "<td>" + (attendance.workform_status || "-") + "</td>" +
+            "<td>" + (attendance.overtime || "-") + "</td>" +
+            "<td>" + (attendance.created_at || "-") + "</td>" +
+            "<td>" + (attendance.night_work_time || "-") + "</td>" +
+            "<td>" + (attendance.special_working_time || "-") + "</td>" +
+            "<td>" + (attendance.modified_reason || "-") + "</td>" +
+            "<td>" + (attendance.businessDate || "-") + "</td>" +
+            "<td>" + (attendance.business_endDate || "-") + "</td>" +
+            "<td>" + (attendance.educationDate || "-") + "</td>" +
+            "<td>" + (attendance.education_endDate || "-") + "</td>" +
+            "<td>" + (attendance.status || "-") + "</td>" +
+        "</tr>"; // 행을 닫음
     });
 }
 </script>
-
-</script>
-				
+	
 				
 				
 <!-- 모달 버튼 -->
@@ -342,7 +398,7 @@ function displayAttendanceInfo(data) {
                 </button>
             </div>
             <div class="modal-body">
-                <form id="attendanceForm">
+                <form id="attendanceForm" >
                     <div class="form-group">
                         <label for="attendance_id">근태 번호</label>
                         <input type="text" class="form-control" id="attendance_id" name="attendance_id" placeholder="수정하고싶은 해당 날짜의 근태번호를 입력해주세요." required>
@@ -353,11 +409,11 @@ function displayAttendanceInfo(data) {
                     </div>
 					            <div class="form-group">
 							    <label for="check_in_time">출근 시간</label>
-							    <input type="text" class="form-control" id="check_in_time" name="check_in" required>
+							    <input type="text" class="form-control" id="check_in_time" name="check_in" placeholder="yyyy-MM-dd HH:mm:ss" required>
 							</div>
 							<div class="form-group">
 							    <label for="check_out_time">퇴근 시간</label>
-							    <input type="text" class="form-control" id="check_out_time" name="check_out" required>
+							    <input type="text" class="form-control" id="check_out_time" name="check_out" placeholder="yyyy-MM-dd HH:mm:ss" required>
 							</div>
                     <div class="form-group">
                         <label for="new_check_in">수정할 출근 시간</label>
@@ -463,7 +519,7 @@ function submitAttendanceForm2() {
         contentType: "application/json",
         data: JSON.stringify(formData), // 데이터를 JSON 문자열로 변환하여 전송
         success: function(response) {
-            alert("신청서가 제출되었습니다: " + response);
+            alert("신청서가 제출되었습니다 ");
             $('#updateModal').modal('hide'); // 모달 닫기
             form.reset(); // 폼 초기화
         },
@@ -484,16 +540,127 @@ function submitAttendanceForm2() {
 				
 				
 				
-				
-				
-				
-				<button class="btn1 btn-primary">
-					<span class="btn-label"> <i class="fa fa-bookmark"></i>
-					</span> 교육/출장 신청서
-				</button>
+<button type="button" class="btn1 btn-primary" data-toggle="modal" data-target="#businessTripModal">
+    <span class="btn-label"> <i class="fa fa-bookmark"></i> </span> 교육/출장 신청서
+</button>
 
-  
-  
+<!-- 출장/교육 신청서 모달 -->
+<div class="modal fade" id="businessTripModal" tabindex="-1" role="dialog" aria-labelledby="businessTripModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="businessTripModalLabel">교육/출장 신청서</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="businessTripForm" onsubmit="event.preventDefault(); validateDates();" >
+                    <div class="form-group">
+                        <label for="emp_id">사원 ID</label>
+                        <input type="text" class="form-control" id="emp_id" name="emp_id" value="<%= empId %>" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="businessDate">출장 시작 날짜</label>
+                        <input type="date" class="form-control" id="businessDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="businessEndDate">출장 종료 날짜</label>
+                        <input type="date" class="form-control" id="businessEndDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="educationDate">교육 시작 날짜</label>
+                        <input type="date" class="form-control" id="educationDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="educationEndDate">교육 종료 날짜</label>
+                        <input type="date" class="form-control" id="educationEndDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="workformStatus">근무 형태</label>
+                        <select class="form-control" id="workformStatus" name="workform_status" required>
+                            <option value="출장">출장</option>
+                            <option value="교육">교육</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="createdAt">신청 날짜 및 시간:</label>
+                        <input type="text" class="form-control" id="createdAt" placeholder="yyyy-MM-dd HH:mm:ss" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reason">신청 이유</label>
+                        <textarea class="form-control" id="reason" name="modified_reason" rows="3" placeholder="신청 이유 입력"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">상태</label>
+                        <select class="form-control" id="status" name="status" required>
+                            <option value="진행 중">진행 중</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submitBusinessTrip()">신청하기</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function submitBusinessTrip() {
+    const empId = document.getElementById('emp_id').value;
+    const businessDate = document.getElementById('businessDate').value;
+    const businessEndDate = document.getElementById('businessEndDate').value;
+    const educationDate = document.getElementById('educationDate').value;
+    const educationEndDate = document.getElementById('educationEndDate').value;
+    const workformStatus = document.getElementById('workformStatus').value;
+    const createdAt = document.getElementById('createdAt').value;
+    const reason = document.getElementById('reason').value;
+
+    // 유효성 검사
+    if (!businessDate && !businessEndDate && !educationDate && !educationEndDate) {
+        alert('출장 시작 날짜, 출장 종료 날짜, 교육 시작 날짜, 교육 종료 날짜 중 하나 이상을 입력해야 합니다.');
+        return;
+    }
+
+    if (businessDate && businessEndDate && new Date(businessEndDate) < new Date(businessDate)) {
+        alert('출장 종료 날짜는 출장 시작 날짜보다 이후여야 합니다.');
+        return;
+    }
+    
+    if (educationDate && educationEndDate && new Date(educationEndDate) < new Date(educationDate)) {
+        alert('교육 종료 날짜는 교육 시작 날짜보다 이후여야 합니다.');
+        return;
+    }
+
+    // 데이터 전송
+    $.ajax({
+        url: 'applyBusinessTrip', // 서버의 엔드포인트 URL 확인
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            emp_id: empId,
+            business_date: businessDate,
+            business_endDate: businessEndDate,
+            education_date: educationDate,
+            education_endDate: educationEndDate,
+            workform_status: workformStatus,
+            created_at: createdAt,
+            modified_reason: reason,
+            status: "진행 중" // 고정된 상태값
+        }),
+        success: function(response) {
+            alert('신청이 완료되었습니다!');
+            $('#businessTripModal').modal('hide'); // 모달 닫기
+        },
+        error: function(error) {
+            alert('신청 중 오류가 발생했습니다. 다시 시도해주세요.');
+            console.error('Error:', error);
+        }
+    });
+}
+</script>
   
   
   
@@ -694,7 +861,7 @@ function recordReturnTime() {
 
     <!--// 출근 시간 문자열을 Date 객체로 변환
                       var checkInTime = new Date(attendance.check_in);
-                      // 한국 시간 (UTC+9)으로 변환 겨우바꿈  -->
+                      // 한국 시간 (UTC+9)으로 변환   -->
       <script>
       
       $(document).ready(function() {

@@ -71,5 +71,7 @@ public interface AttendanceDAO {
 
 	void updateAttendanceA(AttendanceVO attendanceVO);
 
+	void insertBusinessTrip(AttendanceVO attendanceVO);
+
 
 }

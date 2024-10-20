@@ -1,7 +1,10 @@
 package com.Init.domain;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -20,7 +23,7 @@ public class AttendanceVO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp return_time; // 복귀시간
     
-    private String status; // 근무상태
+    private String status; // 결재 상태
     
     private int overtime; // 초과 시간
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -42,4 +45,12 @@ public class AttendanceVO {
     
     private String modified_person; // 수정인
     private String workform_status; // 근무형태
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date businessDate;//출장 날짜
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date business_endDate;//출장 날짜
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date educationDate; // 교육 출장 날짜
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date education_endDate; // 교육 출장 날짜
 }
