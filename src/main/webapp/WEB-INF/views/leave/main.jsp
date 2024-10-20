@@ -138,22 +138,22 @@
 			<div class="form-group">
 			    <label for="remainingLeave">잔여 연차:</label>
 			    <input type="number" id="remainingLeave" name="remaining_annual_leave" class="form-control" 
-			           value="20" readonly required> <!-- 초기 잔여 연차 설정 -->
+			           value="15" readonly required> <!-- 초기 잔여 연차 설정 -->
 			</div>
 			<div class="form-group">
 			    <label for="lgrant">연차 부여:</label>
 			    <input type="number" id="lgrant" name="lgrant" class="form-control" 
-			           value="0" readonly required> <!-- 기본값 설정 -->
+			           value="15" readonly required> <!-- 기본값 설정 -->
 			</div>
 			<div class="form-group">
 			    <label for="expiry">연차 소멸:</label>
 			    <input type="number" id="expiry" name="expiry" class="form-control" 
-			           value="0" readonly required> <!-- 기본값 설정 -->
+			           value="-1" readonly required> <!-- 기본값 설정 -->
 			</div>
 			<div class="form-group">
 			    <label for="adjustment">연차 조정:</label>
 			    <input type="number" id="adjustment" name="adjustment" class="form-control" 
-			           value="0" readonly required> <!-- 기본값 설정 -->
+			           value="1" readonly required> <!-- 기본값 설정 -->
 			</div>
             <div class="form-group">
                 <label for="leaveType">휴가 종류:</label>

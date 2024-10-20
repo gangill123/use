@@ -123,18 +123,27 @@
                     
                     
 
+<br>
+<br>
+<br>
+<br>
 
+	
+      
+            
+                        <h1>사원 근태 관리(관리자)</h1>
+                        
 
-
-
-                      
- <div class="form-group form-inline">
-    <div class="col-md-6 p-0 d-flex align-items-center">
-        <input type="text" class="form-control input-full me-2" id="emp_id" placeholder="사원 ID를 입력하세요">
-</div>       
-        <button id="checkTimeButton" class="btn btn-info btn-wide">사원 근태 조회</button> <!-- CSS 클래스 적용 -->
-    </div>
-
+ 
+    <div class="d-flex align-items-center">
+     	<label class="me-2">사원번호 :</label>
+         <input type="text" class="form-control me-2" id="emp_id" placeholder="사원 ID를 입력하세요" required style="width: 200px;">
+        <button id="checkTimeButton" class="btn btn-info">사원 근태 조회</button> <!-- CSS 클래스 적용 -->
+	</div>       
+   
+<br>
+<br>
+<br>
 
 
 <!-- 사원 근태 데이터 테이블 -->
@@ -581,8 +590,12 @@
 	
 	
 	
+	<br>
+	<br>
+	<br>
+	<br>
 	
-	
+
 	
 
 
@@ -590,9 +603,11 @@
 <!-- QR 생성 -->
 	<h1>사원 출/퇴근 QR카드 발급 </h1>
    <form action="${pageContext.request.contextPath}/getQR" method="get" target="qrFrame" onsubmit="showQrModal(event)">
-    <label for="emp_id">사원번호 :</label>
-    <input type="text" id="modal_emp_id" name="emp_id" placeholder="직원 ID 입력" required>
-    <button type="submit">사원 카드 발급</button>
+   <div class="d-flex align-items-center">
+    <label for="modal_emp_id" class="me-2">사원번호 :</label>
+    <input type="text" class="form-control me-2" id="modal_emp_id" name="emp_id" placeholder="사원 ID를 입력하세요." required style="width: 200px;">
+    <button type="submit" id="checkTimeButton" class="btn btn-info">사원 카드 발급</button>
+</div>
 </form>
 
 <!-- QR 코드 모달 -->
@@ -641,6 +656,12 @@
     });
 </script>
 
+
+	<br>
+	<br>
+	<br>
+	<br>
+	
 
                     
    </div>

@@ -562,19 +562,19 @@ function submitAttendanceForm2() {
                     </div>
                     <div class="form-group">
                         <label for="businessDate">출장 시작 날짜</label>
-                        <input type="date" class="form-control" id="businessDate" required>
+                        <input type="date" class="form-control" id="businessDate" name="businessDateA"required>
                     </div>
                     <div class="form-group">
                         <label for="businessEndDate">출장 종료 날짜</label>
-                        <input type="date" class="form-control" id="businessEndDate" required>
+                        <input type="date" class="form-control" id="businessEndDate" name="businessEndDateB" required>
                     </div>
                     <div class="form-group">
                         <label for="educationDate">교육 시작 날짜</label>
-                        <input type="date" class="form-control" id="educationDate" required>
+                        <input type="date" class="form-control" id="educationDate"name="educationDateA" required>
                     </div>
                     <div class="form-group">
                         <label for="educationEndDate">교육 종료 날짜</label>
-                        <input type="date" class="form-control" id="educationEndDate" required>
+                        <input type="date" class="form-control" id="educationEndDate" name="educationEndDateB" required>
                     </div>
                     <div class="form-group">
                         <label for="workformStatus">근무 형태</label>
@@ -641,9 +641,9 @@ function submitBusinessTrip() {
         contentType: 'application/json',
         data: JSON.stringify({
             emp_id: empId,
-            business_date: businessDate,
+            businessDate: businessDate,
             business_endDate: businessEndDate,
-            education_date: educationDate,
+            educationDate: educationDate,
             education_endDate: educationEndDate,
             workform_status: workformStatus,
             created_at: createdAt,
