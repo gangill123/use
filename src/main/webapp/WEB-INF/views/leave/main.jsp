@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+        <%@ page import="java.text.SimpleDateFormat" %>
+	<%@ page import="java.util.Date" %>
+    
 <!DOCTYPE html>
 <html> <!-- html 태그 추가 -->
 <head>
@@ -17,10 +20,18 @@
     
    
     
-     
     
-    
-    
+    <style>
+    .custom-modal {
+        max-width: 95%; /* 너비를 95%로 설정하여 큰 화면에서도 충분한 크기 유지 */
+    }
+
+    @media (min-width: 992px) { /* 중간 이상 화면에서 적용 */
+        .custom-modal {
+            max-width: 100%; /* 너비를 90%로 설정 */
+        }
+    }
+</style>
     
      
     <script src="${pageContext.request.contextPath }/resources/assets/js/plugin/webfont/webfont.min.js"></script>
@@ -100,6 +111,12 @@
     }
 %>
 
+<%
+    // 현재 날짜와 시간을 yyyy-MM-dd HH:mm:ss 형식으로 포맷
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String createdAt = sdf.format(new Date());
+%>
+
 <button class="btn1 btn-primary" onclick="openLeaveModal()">
     <span class="btn-label">
         <i class="fa fa-bookmark"></i>
@@ -117,6 +134,12 @@
                 <input type="text" id="empId" name="emp_id" class="form-control" 
                        value="<%= empId %>" readonly required>
             </div>
+              
+              <div class="form-group">
+					    <label for="employee_name">직원 이름</label>
+					    <input type="text" class="form-control" id="employee_name" value="${emp_name}" readonly>
+					</div>
+            
             <div class="form-group">
                 <label for="annualLeaveStartDate">연차 시작일:</label>
                 <input type="date" id="annualLeaveStartDate" name="annual_leave_start_date" class="form-control" required>
@@ -167,6 +190,15 @@
                     <option value="진행중">진행중</option>
                 </select>
             </div>
+            
+               <div>
+				    <label for="created_at">신청 날짜 및 시간:</label>
+						    <input
+						        type="text" class="form-control" id="created_at"
+						        name="created_at" placeholder="yyyy-MM-dd HH:mm:ss"
+						        value="<%=createdAt %>" required readonly>
+					</div>
+            
             <div class="form-group">
                 <label for="reason">신청 사유:</label>
                 <textarea id="reason" name="reason" class="form-control" rows="4" required></textarea>
@@ -289,6 +321,12 @@ function submitLeaveForm() {
                         <label for="empId">사원 번호:</label>
                         <input type="text" id="empId" name="emp_id" class="form-control" value="<%= empId %>" readonly required>
                     </div>
+                    
+                      <div class="form-group">
+					    <label for="employee_name">직원 이름</label>
+					    <input type="text" class="form-control" id="employee_name" value="${emp_name}" readonly>
+					</div>
+                    
                     <div class="form-group">
                         <label for="leave_type">휴가 유형</label>
                         <select class="form-control" id="leave_type" name="leave_type" required>
@@ -317,6 +355,15 @@ function submitLeaveForm() {
                             <option value="진행중">진행중</option>
                         </select>
                     </div>
+                    
+                       <div>
+				    <label for="created_at">신청 날짜 및 시간:</label>
+						    <input
+						        type="text" class="form-control" id="created_at"
+						        name="created_at" placeholder="yyyy-MM-dd HH:mm:ss"
+						        value="<%=createdAt %>" required readonly>
+					</div>
+                    
                     <div class="form-group">
                         <label for="reason">신청 사유</label>
                         <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
@@ -445,6 +492,12 @@ document.getElementById("end_leave_date").addEventListener("change", calculateTo
                         <label for="empIdLeave">사원 번호:</label>
                         <input type="text" id="empIdLeave" name="emp_id" class="form-control" value="<%= empId %>" readonly required>
                     </div>
+                    
+                      <div class="form-group">
+					    <label for="employee_name">직원 이름</label>
+					    <input type="text" class="form-control" id="employee_name" value="${emp_name}" readonly>
+					</div>
+                    
                     <div class="form-group">
                         <label for="leave_type_leave">휴직 유형</label>
                         <select class="form-control" id="leave_type_leave" name="leave_type" required>
@@ -471,6 +524,15 @@ document.getElementById("end_leave_date").addEventListener("change", calculateTo
                             <option value="대기">진행중</option>
                         </select>
                     </div>
+                    
+                      <div>
+				    <label for="created_at">신청 날짜 및 시간:</label>
+						    <input
+						        type="text" class="form-control" id="created_at"
+						        name="created_at" placeholder="yyyy-MM-dd HH:mm:ss"
+						        value="<%=createdAt %>" required readonly>
+					</div>
+                    
                     <div class="form-group">
                         <label for="reason_leave">신청 사유</label>
                         <textarea class="form-control" id="reason_leave" name="reason" rows="3" required></textarea>
@@ -512,7 +574,7 @@ document.getElementById("end_leave_date").addEventListener("change", calculateTo
         const startDate = new Date(document.getElementById("leave_start_date_leave").value);
         const endDate = new Date(document.getElementById("end_leave_date_leave").value);
         if (!isNaN(startDate) && !isNaN(endDate)) {
-            const totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1; // +1 to include start date
+            const totalDays = (endDate - startDate) / (1000 * 60 * 60 * 24) + 1; // 
             document.getElementById("total_leave_days_leave").value = totalDays;
         }
     }
@@ -584,15 +646,15 @@ document.getElementById("end_leave_date").addEventListener("change", calculateTo
 
 <!-- 나의 휴가 현황 모달 -->
 <div class="modal fade" id="leaveStatusModal" tabindex="-1" role="dialog" aria-labelledby="leaveStatusModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document"> <!-- modal-lg로 크기 조정 -->
-        <div class="modal-content">
+    <div class="modal-dialog modal-xl" role="document"> 
+        <div class="modal-content" >
             <div class="modal-header">
                 <h5 class="modal-title" id="leaveStatusModalLabel">나의 휴가 현황</h5>
                 <button type="button" class="close" onclick="closeLeaveStatusModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body ">
                 <div style="overflow-x: auto;"> <!-- 가로 스크롤을 위한 div -->
                     <table class="table">
                         <thead>

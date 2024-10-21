@@ -153,5 +153,9 @@ public class AttendanceServiceImpl implements AttendanceService {
         // 필요한 데이터 검증 및 처리 로직 추가
         attendanceDAO.insertBusinessTrip(attendanceVO);
     }
+    @Override
+    public AttendanceVO getEmployee(String emp_id) {
+        return attendanceDAO.getEmployee(emp_id);
+    }
 
 }

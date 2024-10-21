@@ -9,6 +9,14 @@ import lombok.Data;
 
 @Data
 public class AttendanceVO {
+	
+	
+	
+	private String emp_job;
+
+	private String emp_position;
+
+	private String emp_name;
 
     private int attendance_id; // 출근번호
     private String emp_cid;// 부서번호

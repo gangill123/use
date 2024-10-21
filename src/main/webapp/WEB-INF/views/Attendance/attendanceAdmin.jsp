@@ -152,7 +152,7 @@
                 <thead>
                     <tr>
                         <th>직원 ID</th>
-                        <th>직원 CID</th>
+                        <th>근태 ID</th>
                         <th>출근 시간</th>
                         <th>퇴근 시간</th>
                         <th>외출 시간</th>
@@ -166,7 +166,6 @@
                         <th>외출 수정 시간</th>
                         <th>결재 수정 시간</th>
                         <th>신청일</th>
-                        <th>근태 ID</th>
                         <th>상태</th>
                         <th>초과 근무 시간</th>                        
                         <th>출장 시작 날짜</th>
@@ -333,7 +332,7 @@
                             $("#checkTimeList").append(
                             		"<tr>" +
                             	    "<td>" + (attendance.emp_id || "-") + "</td>" +
-                            	    "<td>" + (attendance.emp_cid || "-") + "</td>" +
+                            	    "<td>" + (attendance.attendance_id || "-") + "</td>" +                          	   
                             	    "<td>" + (attendance.check_in || "-") + "</td>" +
                             	    "<td>" + (attendance.check_out || "-") + "</td>" +
                             	    "<td>" + (attendance.workingoutside_time || "-") + "</td>" +
@@ -347,7 +346,6 @@
                             	    "<td>" + (attendance.new_workingoutside_time || "-") + "</td>" +
                             	    "<td>" + (attendance.modified_time || "-") + "</td>" +
                             	    "<td>" + (attendance.created_at || "-") + "</td>" +
-                            	    "<td>" + (attendance.attendance_id || "-") + "</td>" +
                             	    "<td>" + (attendance.status || "-") + "</td>" +
                             	    "<td>" + (attendance.overtime || "-") + "</td>" +
                             	    "<td>" + (attendance.businessDate || "-") + "</td>" +

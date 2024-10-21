@@ -73,5 +73,9 @@ public interface AttendanceDAO {
 
 	void insertBusinessTrip(AttendanceVO attendanceVO);
 
+	AttendanceVO getEmployee(String emp_id);
+
+	
+
 
 }

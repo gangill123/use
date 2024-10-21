@@ -136,10 +136,10 @@ public class AttendanceDAOImpl implements AttendanceDAO {
 
 		sqlSession.update(NAMESPACE + ".updateWorkformStatus", params);
 	}
-
+	//수정 
 	@Override
 	public void insertOvertime(AttendanceVO attendanceVO) {
-		sqlSession.insert(NAMESPACE + ".insertOvertime", attendanceVO);
+		sqlSession.update(NAMESPACE + ".updateOvertime", attendanceVO);
 	}
 	
 	@Override
@@ -164,6 +164,11 @@ public class AttendanceDAOImpl implements AttendanceDAO {
     @Override
     public void insertBusinessTrip(AttendanceVO attendanceVO) {
     	sqlSession.insert(NAMESPACE + ".insertBusinessTrip", attendanceVO);
+    	
+    }
+    @Override
+    public AttendanceVO getEmployee(String emp_id) {
+    	 return sqlSession.selectOne(NAMESPACE + ".getEmployee", emp_id);
     	
     }
 }

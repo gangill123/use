@@ -22,20 +22,7 @@
         max-width: 100%; /* 최대 너비를 100%로 설정 */
     }
 
-    #checkLeaveTable th,
-    #checkLeaveTable td {
-        overflow: hidden; /* 넘치는 내용 숨기기 */
-        white-space: nowrap; /* 줄바꿈을 방지 */
-        text-overflow: ellipsis; /* 텍스트가 넘칠 경우 생략 부호 추가 */
-        padding: 10px; /* 패딩 추가로 여백 조정 */
-        border: 1px solid #dee2e6; /* 경계 추가 */
-       
-    }
-
-    #checkLeaveTable th {
-        background-color: #f8f9fa; /* 헤더 배경 색상 */
-        font-weight: bold; /* 헤더 글씨 두껍게 */
-    }
+   
 	
 .btn-wide {
     width: 150px; /* 원하는 너비로 조정 */
@@ -45,6 +32,24 @@
 </style>
    
    
+     <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .btn-wide {
+    width: 150px; /* 원하는 너비로 조정 */
+}
+    </style>
    
     <!-- Fonts and icons -->
     

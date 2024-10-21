@@ -3,6 +3,7 @@ package com.Init.controller;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -53,33 +54,48 @@ public class AttendanceController {
 	// 메인
 	// qr코드로 넘어온 파라메터값 출퇴근 로직을 처리하고 최근 출퇴근을 조회하는 메서드
 
-	// 출근 시간 기록 및 조회
 	@GetMapping(value = "attendanceMain")
-	public String handleAttendance(@RequestParam(value = "emp_id", required = false) String emp_id, Model model,
-			HttpSession session) {
-		logger.debug(" /attendanceMain -> page 실행 ");
+	public String handleAttendance(
+	        @RequestParam(value = "emp_id", required = false) String emp_id,
+	        Model model,
+	        HttpSession session) {
+	    
+	    logger.debug("/attendanceMain -> page 실행 ");
 
-		if (emp_id != null && !emp_id.isEmpty()) {
-			// 세션에 emp_id 저장
-			// addFlashAtrribute ();
-			session.setAttribute("emp_id", emp_id);
+	    if (emp_id != null && !emp_id.isEmpty()) {
+	        // 세션에 emp_id 저장
+	        session.setAttribute("emp_id", emp_id);
 
-			// 출근 기록 삽입 (출근 시에만 실행)
-			attendanceService.recordCheckIn(emp_id); // 매퍼를 통해 출근 기록 삽입
+	        // 출근 기록 삽입 (출근 시에만 실행)
+	        attendanceService.recordCheckIn(emp_id); // 매퍼를 통해 출근 기록 삽입
 
-			// 방금 저장된 최신 출근 기록 조회
-			AttendanceVO latestCheckInData = attendanceService.fetchLatestAttendanceRecord(emp_id);
+	        // 방금 저장된 최신 출근 기록 조회
+	        AttendanceVO latestCheckInData = attendanceService.fetchLatestAttendanceRecord(emp_id);
 
-			if (latestCheckInData != null) {
-				model.addAttribute("checkInTime", formatTimestamp(latestCheckInData.getCheck_in()));
-			}
-			model.addAttribute("emp_id", emp_id);
-		} else {
-			logger.debug("emp_id가 존재하지 않거나 비어 있습니다."); // 로그 추가 가능
-		}
+	        if (latestCheckInData != null) {
+	            model.addAttribute("checkInTime", formatTimestamp(latestCheckInData.getCheck_in()));
+	        }
 
-		return "Attendance/attendanceMain"; // JSP 페이지로 이동
+	        // 직원 정보 조회 및 세션에 저장
+	        AttendanceVO employee = attendanceService.getEmployee(emp_id);
+	        if (employee != null) {
+	            // 세션에 직원 정보를 저장
+	            session.setAttribute("emp_job", employee.getEmp_job());
+	            session.setAttribute("emp_position", employee.getEmp_position());
+	            session.setAttribute("emp_name", employee.getEmp_name());
+
+	            // JSP에서 사용할 수 있도록 model에 추가
+	            model.addAttribute("emp_job", employee.getEmp_job());
+	            model.addAttribute("emp_position", employee.getEmp_position());
+	            model.addAttribute("emp_name", employee.getEmp_name());
+	        }
+	    } else {
+	        logger.debug("emp_id가 존재하지 않거나 비어 있습니다."); // 로그 추가 가능
+	    }
+
+	    return "Attendance/attendanceMain"; // JSP 페이지로 이동
 	}
+	
 
 	// 퇴근 처리 요청 (GET)
 	@GetMapping("/checkOut")
@@ -337,7 +353,6 @@ public class AttendanceController {
         }
     }
     
-    
-    
+  
     
 }

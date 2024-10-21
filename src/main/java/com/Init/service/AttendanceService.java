@@ -58,6 +58,8 @@ public interface AttendanceService {
 	public void updateAttendanceRecordA(AttendanceVO attendanceVO);
 
 	public void applyBusinessTrip(AttendanceVO attendanceVO);
+
+	public AttendanceVO getEmployee(String emp_id);
     
     
 	
