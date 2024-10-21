@@ -613,7 +613,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="qrModalLabel">QR 코드</h5>
+                <h5 class="modal-title" id="qrModalLabel">QR 코드ㄴ</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeQrModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
