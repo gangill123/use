@@ -94,9 +94,14 @@ public class AttendanceServiceImpl implements AttendanceService {
 
 	// 페이징을 위한 새로운 메소드 구현
 	@Override
-	public List<AttendanceVO> getAllCheckTime(String emp_id, int offset, int size) {
-		return attendanceDAO.getAllCheckTime(emp_id, offset, size);
+	public List<AttendanceVO> getAllCheckTime(String emp_id, int offset, int size, String date) {
+		return attendanceDAO.getAllCheckTime(emp_id, offset, size,date);
 	}
+	
+    @Override
+    public int countAttendance(String emp_id, String date) {
+        return attendanceDAO.countAttendance(emp_id, date);
+    }
 
 	public int getTotalCheckTimeCount(String emp_id) {
 		return attendanceDAO.getTotalCheckTimeCount(emp_id);

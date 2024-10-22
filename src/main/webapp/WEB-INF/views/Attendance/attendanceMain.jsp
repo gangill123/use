@@ -759,9 +759,11 @@ function submitBusinessTrip() {
         </div>
         <div class="flex justify-between">
         <span class="font-semibold">출근 시간:</span>
+          <c:if test="${checkInTime != null}">
 		    <c:if test="${not empty checkInTime}">        
 		        <span>${checkInTime}</span>
 		    </c:if>
+		     </c:if>
 		</div>
         <div class="flex justify-between">
             <span class="font-semibold">퇴근 시간:</span>
@@ -806,6 +808,14 @@ function submitBusinessTrip() {
 </div>
    
   <script>
+  // 출근 성공 시 알림 표시
+  window.onload = function() {
+      <c:if test="${checkInSuccess}">
+          alert('출근이 성공적으로 처리되었습니다.');
+      </c:if>
+  };
+  
+  
 function recordOutdoorTime() {
     const attendanceData = {
         emp_id: "${sessionScope.emp_id}", // JSP에서 세션 값 사용

@@ -43,7 +43,7 @@ public interface AttendanceDAO {
 	double getWorkingTime(String emp_id);
 
 	// 페이징을 위한 새로운 메소드
-	List<AttendanceVO> getAllCheckTime(String emp_id, int offset, int size);
+	List<AttendanceVO> getAllCheckTime(String emp_id, int offset, int size, String date);
 
 	int getTotalCheckTimeCount(@Param("empId") String emp_id);
 
@@ -74,6 +74,8 @@ public interface AttendanceDAO {
 	void insertBusinessTrip(AttendanceVO attendanceVO);
 
 	AttendanceVO getEmployee(String emp_id);
+
+	int countAttendance(String emp_id, String date);
 
 	
 

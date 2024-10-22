@@ -138,6 +138,12 @@
     <div class="d-flex align-items-center">
      	<label class="me-2">사원번호 :</label>
          <input type="text" class="form-control me-2" id="emp_id" placeholder="사원 ID를 입력하세요" required style="width: 200px;">
+        
+          <label class="me-2">날짜 :</label>
+    		<input type="date" class="form-control me-2" id="selectedDate" required style="width: 200px;">
+        
+        
+        
         <button id="checkTimeButton" class="btn btn-info">사원 근태 조회</button> <!-- CSS 클래스 적용 -->
 	</div>       
    
@@ -306,10 +312,20 @@
     $(document).ready(function() {
         var currentPage = 1; // 현재 페이지 번호
         var itemsPerPage = 10; // 페이지 당 아이템 수
+		
+        
+        // 날짜 선택 변경 시 데이터 로드
+        $("#selectedDate").change(function() {
+            currentPage = 1; // 페이지를 1로 초기화
+            loadAttendanceData(currentPage); // 데이터 로드
+        });
 
+        
+        
         function loadAttendanceData(page) {
             var empId = $("#emp_id").val(); // 입력된 사원 ID 가져오기
-
+            var selectedDate = $("#selectedDate").val(); // 선택된 날짜 가져오기
+			
             // AJAX 요청
             $.ajax({
                 url: '/Attendance/attendanceData', // 요청 URL
@@ -317,7 +333,8 @@
                 data: { 
                     emp_id: empId, 
                     page: page,
-                    size: itemsPerPage
+                    size: itemsPerPage,
+                    date: selectedDate
                 },
                 success: function(response) {
                     var data = response.data;
@@ -613,7 +630,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="qrModalLabel">QR 코드ㄴ</h5>
+                <h5 class="modal-title" id="qrModalLabel">QR 코드</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeQrModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>

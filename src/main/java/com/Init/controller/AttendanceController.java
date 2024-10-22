@@ -59,7 +59,7 @@ public class AttendanceController {
 	        @RequestParam(value = "emp_id", required = false) String emp_id,
 	        Model model,
 	        HttpSession session) {
-	    
+
 	    logger.debug("/attendanceMain -> page 실행 ");
 
 	    if (emp_id != null && !emp_id.isEmpty()) {
@@ -74,27 +74,29 @@ public class AttendanceController {
 
 	        if (latestCheckInData != null) {
 	            model.addAttribute("checkInTime", formatTimestamp(latestCheckInData.getCheck_in()));
+
+	            // 출근 기록이 성공적으로 인서트되었음을 알리기 위한 플래그 설정
+	            model.addAttribute("checkInSuccess", true);
 	        }
 
 	        // 직원 정보 조회 및 세션에 저장
 	        AttendanceVO employee = attendanceService.getEmployee(emp_id);
 	        if (employee != null) {
-	            // 세션에 직원 정보를 저장
 	            session.setAttribute("emp_job", employee.getEmp_job());
 	            session.setAttribute("emp_position", employee.getEmp_position());
 	            session.setAttribute("emp_name", employee.getEmp_name());
 
-	            // JSP에서 사용할 수 있도록 model에 추가
 	            model.addAttribute("emp_job", employee.getEmp_job());
 	            model.addAttribute("emp_position", employee.getEmp_position());
 	            model.addAttribute("emp_name", employee.getEmp_name());
 	        }
 	    } else {
-	        logger.debug("emp_id가 존재하지 않거나 비어 있습니다."); // 로그 추가 가능
+	        logger.debug("emp_id가 존재하지 않거나 비어 있습니다.");
 	    }
 
-	    return "Attendance/attendanceMain"; // JSP 페이지로 이동
+	    return "Attendance/attendanceMain";
 	}
+
 	
 
 	// 퇴근 처리 요청 (GET)
@@ -152,72 +154,70 @@ public class AttendanceController {
 		logger.debug(" /views/Attendance/attendanceMain.jsp 뷰페이지 연결");
 		return "Attendance/attendanceAdmin"; // 이동할 JSP 페이지
 	}
-
-	// 어드민페이지 날짜 시간 관련 포맷팅
 	@RequestMapping(value = "attendanceData", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> getPagedCheckTime(@RequestParam("emp_id") String emp_id, @RequestParam("page") int page,
-			@RequestParam("size") int size) {
+	public Map<String, Object> getPagedCheckTime(@RequestParam("emp_id") String emp_id,  	                                             
+	                                             @RequestParam("page") int page,
+	                                             @RequestParam("size") int size,
+	                                             @RequestParam(value = "date", required = false) String date ) {
 
-		// 페이지 인덱스 계산 (0부터 시작하므로)
-		int offset = (page - 1) * size;
+	    // 페이지 인덱스 계산 (0부터 시작하므로)
+	    int offset = (page - 1) * size;
 
-		// 페이징된 데이터 가져오기
-		List<AttendanceVO> attendanceList = attendanceService.getAllCheckTime(emp_id, offset, size);
-		System.out.println("Retrieved attendanceList: " + attendanceList);
-		int totalItems = attendanceService.getTotalCheckTimeCount(emp_id); // 전체 항목 수 가져오기
+	    // 날짜와 함께 필터링된 페이징된 데이터 가져오기
+	    List<AttendanceVO> attendanceList = attendanceService.getAllCheckTime(emp_id, offset, size, date);
+	    System.out.println("Retrieved attendanceList: " + attendanceList);
 
-		List<Map<String, Object>> attendanceDataList = new ArrayList<>();
-		
-	
-		// AttendanceVO 리스트를 Map으로 변환하여 포맷팅
-		for (AttendanceVO attendance : attendanceList) {
-			Map<String, Object> attendanceData = new HashMap<>();
-			
-			
-			
-			// 포맷된 데이터 추가
-			attendanceData.put("check_in", formatTimestamp(attendance.getCheck_in()));
-			attendanceData.put("check_out", formatTimestamp(attendance.getCheck_out()));
-			attendanceData.put("return_time", formatTimestamp(attendance.getReturn_time()));
-			attendanceData.put("workingoutside_time", formatTimestamp(attendance.getWorkingOutside_time()));
-			attendanceData.put("new_check_in", formatTimestamp(attendance.getNew_check_in()));
-			attendanceData.put("new_check_out", formatTimestamp(attendance.getNew_check_out()));
-			attendanceData.put("new_workingoutside_time", formatTimestamp(attendance.getNew_WorkingOutside_time()));
-			attendanceData.put("modified_time", formatTimestamp(attendance.getModified_time()));
-			attendanceData.put("created_at", formatTimestamp(attendance.getCreated_at()));
+	    // 총 근태 항목 수 계산 (날짜 필터링 적용)
+	    int totalItems = attendanceService.countAttendance(emp_id, date);
 
-			// 원본 데이터 추가 
-			attendanceData.put("attendance_id", attendance.getAttendance_id());
-			attendanceData.put("emp_id", attendance.getEmp_id());
-			attendanceData.put("emp_cid", attendance.getEmp_cid());
-			attendanceData.put("status", attendance.getStatus());
-			attendanceData.put("overtime", attendance.getOvertime());
-			attendanceData.put("working_time", attendance.getWorking_time());
-			attendanceData.put("night_work_time", attendance.getNight_work_time());
-			attendanceData.put("special_working_time", attendance.getSpecial_working_time());
-			attendanceData.put("modified_reason", attendance.getModified_reason());
-			attendanceData.put("modified_person", attendance.getModified_person());
-			attendanceData.put("workform_status", attendance.getWorkform_status());
-			
-			   // 날짜 데이터 포맷팅
-		    attendanceData.put("businessDate", formatDate(attendance.getBusinessDate()));
-		    attendanceData.put("business_endDate", formatDate(attendance.getBusiness_endDate()));
-		    attendanceData.put("educationDate", formatDate(attendance.getEducationDate()));
-		    attendanceData.put("education_endDate", formatDate(attendance.getEducation_endDate()));
+	    List<Map<String, Object>> attendanceDataList = new ArrayList<>();
+	    
+	    // AttendanceVO 리스트를 Map으로 변환하여 포맷팅
+	    for (AttendanceVO attendance : attendanceList) {
+	        Map<String, Object> attendanceData = new HashMap<>();
+	        
+	        // 포맷된 데이터 추가
+	        attendanceData.put("check_in", formatTimestamp(attendance.getCheck_in()));
+	        attendanceData.put("check_out", formatTimestamp(attendance.getCheck_out()));
+	        attendanceData.put("return_time", formatTimestamp(attendance.getReturn_time()));
+	        attendanceData.put("workingoutside_time", formatTimestamp(attendance.getWorkingOutside_time()));
+	        attendanceData.put("new_check_in", formatTimestamp(attendance.getNew_check_in()));
+	        attendanceData.put("new_check_out", formatTimestamp(attendance.getNew_check_out()));
+	        attendanceData.put("new_workingoutside_time", formatTimestamp(attendance.getNew_WorkingOutside_time()));
+	        attendanceData.put("modified_time", formatTimestamp(attendance.getModified_time()));
+	        attendanceData.put("created_at", formatTimestamp(attendance.getCreated_at()));
 
+	        // 원본 데이터 추가 
+	        attendanceData.put("attendance_id", attendance.getAttendance_id());
+	        attendanceData.put("emp_id", attendance.getEmp_id());
+	        attendanceData.put("emp_cid", attendance.getEmp_cid());
+	        attendanceData.put("status", attendance.getStatus());
+	        attendanceData.put("overtime", attendance.getOvertime());
+	        attendanceData.put("working_time", attendance.getWorking_time());
+	        attendanceData.put("night_work_time", attendance.getNight_work_time());
+	        attendanceData.put("special_working_time", attendance.getSpecial_working_time());
+	        attendanceData.put("modified_reason", attendance.getModified_reason());
+	        attendanceData.put("modified_person", attendance.getModified_person());
+	        attendanceData.put("workform_status", attendance.getWorkform_status());
+	        
+	        // 날짜 데이터 포맷팅
+	        attendanceData.put("businessDate", formatDate(attendance.getBusinessDate()));
+	        attendanceData.put("business_endDate", formatDate(attendance.getBusiness_endDate()));
+	        attendanceData.put("educationDate", formatDate(attendance.getEducationDate()));
+	        attendanceData.put("education_endDate", formatDate(attendance.getEducation_endDate()));
 
-			attendanceDataList.add(attendanceData);
-		}
+	        attendanceDataList.add(attendanceData);
+	    }
 
-		// 응답을 Map에 담아 반환
-		Map<String, Object> response = new HashMap<>();
-		response.put("data", attendanceDataList);
-		response.put("totalItems", totalItems);
-		response.put("currentPage", page);
-		response.put("totalPages", (totalItems + size - 1) / size); // 전체 페이지 수
+	    // 응답을 Map에 담아 반환
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("data", attendanceDataList);
+	    response.put("totalItems", totalItems);
+	    response.put("currentPage", page);
+	    response.put("totalPages", (totalItems + size - 1) / size); // 전체 페이지 수
 
-		return response;
+	    return response;
 	}
 	
 	private String formatDate(Date date) {

@@ -99,14 +99,26 @@ public class AttendanceDAOImpl implements AttendanceDAO {
 
 	// 페이징을 위한 새로운 메소드 구현
 	@Override
-	public List<AttendanceVO> getAllCheckTime(String emp_id, int offset, int size) {
+	public List<AttendanceVO> getAllCheckTime(String emp_id, int offset, int size,String date) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("emp_id", emp_id);
 		params.put("offset", offset);
 		params.put("size", size);
+		params.put("date", date);
 
 		return sqlSession.selectList(NAMESPACE + ".getAllCheckTimeWithPaging", params);
 	}
+	@Override
+	public int countAttendance(String emp_id, String date) {
+		 Map<String, Object> params = new HashMap<>();
+	        params.put("emp_id", emp_id);
+	        params.put("date", date);
+	        
+	        return sqlSession.selectOne(NAMESPACE+".countAttendance", params);
+	    }
+	
+	
+	
 
 	@Override
 	public int getTotalCheckTimeCount(String emp_id) {

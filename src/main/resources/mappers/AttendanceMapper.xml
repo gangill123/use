@@ -98,9 +98,22 @@
 		JOIN employee e ON
 		a.emp_id = e.emp_id
 		WHERE a.emp_id = #{emp_id}
+		<if test="date != null">
+            AND DATE(check_in) = #{date} <!-- check_in이 날짜에 해당하는 데이터만 가져옵니다. -->
+        </if>
 		ORDER BY check_in DESC
 		LIMIT #{size} OFFSET #{offset}
 	</select>
+	
+	<select id="countAttendance" parameterType="map" resultType="int">
+           SELECT COUNT(*)
+		    FROM attendance_ch
+		    WHERE emp_id = #{emp_id}
+		    <if test="date != null and date != ''">
+		        AND DATE(check_in) = #{date}
+		    </if>
+    </select>
+	
 
 	<select id="getTotalCheckTimeCount" parameterType="string"
 		resultType="int">

@@ -31,7 +31,9 @@ public interface AttendanceService {
 	public double getLatestWorkingTime(String emp_id);
 
 	// 페이징을 위한 새로운 메소드
-	List<AttendanceVO> getAllCheckTime(String emp_id, int offset, int size);
+	List<AttendanceVO> getAllCheckTime(String emp_id, int offset, int size, String date);
+	
+int countAttendance(String emp_id, String date);
 
 	public int getTotalCheckTimeCount(String emp_id);
 
