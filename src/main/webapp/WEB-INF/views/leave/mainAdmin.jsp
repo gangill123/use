@@ -123,10 +123,10 @@
 			<label class="me-2">사원 ID:</label>
 			<input type="text" class="form-control me-2" id="emp_id" placeholder="사원 ID를 입력하세요" required style="width: 200px;">
 			
-			<label class="me-2">휴가 시작 날짜:</label>
+			<label class="me-2">휴가 시작 날짜별(선택):</label>
 			<input type="date" class="form-control me-2" id="leave_start_date" style="width: 200px;">
 			
-			<label class="me-2">연차 시작 날짜:</label>
+			<label class="me-2">연차 시작 날짜별(선택):</label>
 			<input type="date" class="form-control me-2" id="annual_leave_start_date" style="width: 200px;">
 			
 			<button id="checkLeavesButton" class="btn btn-info">사원 휴가 조회</button>

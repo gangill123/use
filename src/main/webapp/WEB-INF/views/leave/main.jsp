@@ -889,27 +889,30 @@ function closeLeaveStatusModal() {
                 if (data.length === 0) {
                     $('#leaveTableBody').append('<tr><td colspan="7">연차 정보가 없습니다. 로그인 상태를 확인해주세요.</td></tr>');
                 } else {
-                    // 데이터가 있을 경우
-                    let hasValidData = false; // 유효한 데이터가 있는지 체크하는 플래그
-                    data.forEach(function(leave) {
-                        // 각 leave 정보의 필드를 체크하여 유효한 데이터인지 확인
-                        if (leave.annual_leave_start_date || leave.lgrant || leave.total_annual_leave || 
-                            leave.expiry || leave.adjustment || leave.used_annual_leave || 
-                            leave.remaining_annual_leave) {
-                            hasValidData = true; // 유효한 데이터가 있는 경우 플래그를 true로 변경
-                            $('#leaveTableBody').append(
-                                '<tr>' +
-                                    '<td>' + (leave.annual_leave_start_date || '-') + '</td>' +
-                                    '<td>' + (leave.lgrant || '-') + '</td>' +
-                                    '<td>' + (leave.total_annual_leave || '-') + '</td>' +
-                                    '<td>' + (leave.expiry || '-') + '</td>' +
-                                    '<td>' + (leave.adjustment || '-') + '</td>' +
-                                    '<td>' + (leave.used_annual_leave || '-') + '</td>' +
-                                    '<td>' + (leave.remaining_annual_leave || '-') + '</td>' +
-                                '</tr>'
-                            );
-                        }
-                    });
+                    // 데이터가 있을 경우			   
+				let hasValidData = false; // 유효한 데이터가 있는지 체크하는 플래그
+				data.forEach(function(leave) {
+				    // 연차 시작 날짜가 있는 경우에만 데이터를 체크
+				    if (leave.annual_leave_start_date) {
+				        // 각 leave 정보의 필드를 체크하여 유효한 데이터인지 확인
+				        if (leave.lgrant || leave.total_annual_leave || 
+				            leave.expiry || leave.adjustment || leave.used_annual_leave || 
+				            leave.remaining_annual_leave) {
+				            hasValidData = true; // 유효한 데이터가 있는 경우 플래그를 true로 변경
+				            $('#leaveTableBody').append(
+				                '<tr>' +
+				                    '<td>' + leave.annual_leave_start_date + '</td>' +
+				                    '<td>' + (leave.lgrant || '-') + '</td>' +
+				                    '<td>' + (leave.total_annual_leave || '-') + '</td>' +
+				                    '<td>' + (leave.expiry || '-') + '</td>' +
+				                    '<td>' + (leave.adjustment || '-') + '</td>' +
+				                    '<td>' + (leave.used_annual_leave || '-') + '</td>' +
+				                    '<td>' + (leave.remaining_annual_leave || '-') + '</td>' +
+				                '</tr>'
+				            );
+				        }
+				    }
+				});
 
                     // 유효한 데이터가 없을 경우 메시지 표시
                     if (!hasValidData) {

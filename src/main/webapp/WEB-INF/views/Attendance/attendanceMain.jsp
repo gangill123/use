@@ -400,7 +400,7 @@ function displayAttendanceInfo(data) {
                 <form id="attendanceForm" >
                     <div class="form-group">
                         <label for="attendance_id">근태 번호</label>
-                        <input type="text" class="form-control" id="attendance_id" name="attendance_id" placeholder="수정하고싶은 해당 날짜의 근태번호를 입력해주세요." required>
+                        <input type="text" class="form-control" id="attendance_idA" name="attendance_idA" placeholder="수정하고싶은 해당 날짜의 근태번호를 입력해주세요." required>
                     </div>
                     <div class="form-group">
                         <label for="emp_id">사원 ID</label>
@@ -474,7 +474,7 @@ $(document).ready(function() {
 
 function submitAttendanceForm2() {
     // 필드 값 초기화 및 명확한 변수명 사용
-    const attendanceId = $('#attendance_id').val(); // 사용자가 입력한 근태 번호
+    const attendanceId = $('#attendance_idA').val(); // 사용자가 입력한 근태 번호
     const empId = $('#emp_id').val(); // 사원 ID (readonly)
     const currentCheckIn = $('#check_in_time').val(); // 기존 출근 시간
     const currentCheckOut = $('#check_out_time').val(); // 기존 퇴근 시간
@@ -527,13 +527,16 @@ function submitAttendanceForm2() {
         data: JSON.stringify(formData), // 데이터를 JSON 문자열로 변환하여 전송
         success: function(response) {
             alert("신청서가 제출되었습니다 ");
+            // 폼 전체 초기화
+            $('#attendanceForm')[0].reset();
+
             $('#updateModal').modal('hide'); // 모달 닫기
-            form.reset(); // 폼 초기화
+            
         },
         error: function(xhr, status, error) {
             console.error("Error:", error); // 디버깅을 위한 로그 확인
-            alert("신청서 제출에 실패했습니다: " + xhr.responseText);
             form.reset(); // 폼 초기화
+            alert("신청서 제출에 실패했습니다: " + xhr.responseText);
         }
     });
 }
@@ -630,7 +633,6 @@ function submitBusinessTrip() {
     const educationDate = document.getElementById('educationDate').value;
     const educationEndDate = document.getElementById('educationEndDate').value;
     const workformStatus = document.getElementById('workformStatus').value;
-    const createdAt = document.getElementById('createdAt').value;
     const reason = document.getElementById('reason').value;
 
     // 유효성 검사
@@ -651,7 +653,7 @@ function submitBusinessTrip() {
 
     // 데이터 전송
     $.ajax({
-        url: 'applyBusinessTrip', // 서버의 엔드포인트 URL 확인
+        url: 'applyBusinessTrip', // 엔드포인트 URL 확인 필요
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -661,12 +663,13 @@ function submitBusinessTrip() {
             educationDate: educationDate,
             education_endDate: educationEndDate,
             workform_status: workformStatus,
-            created_at: createdAt,
             modified_reason: reason,
             status: "진행 중" // 고정된 상태값
         }),
         success: function(response) {
             alert('신청이 완료되었습니다!');
+            document.getElementById('businessTripForm').reset(); // 폼 ID가 'businessTripForm'일 경우
+            
             $('#businessTripModal').modal('hide'); // 모달 닫기
         },
         error: function(error) {

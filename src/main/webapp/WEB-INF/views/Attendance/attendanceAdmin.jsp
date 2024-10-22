@@ -140,7 +140,7 @@
         <label class="me-2">사원번호 :</label>
         <input type="text" class="form-control me-2" id="emp_id" name="emp_id" placeholder="사원 ID를 입력하세요" required style="width: 200px;">
         
-        <label class="me-2">근태 날짜 조회 :</label>
+        <label class="me-2">출근 날짜별(선택) :</label>
         <input type="date" class="form-control me-2" id="selectedDate" name="leave_start_date" required style="width: 200px;">
         
         <button type="submit" id="checkTimeButton" class="btn btn-info">사원 근태 조회</button>
