@@ -9,7 +9,9 @@ import lombok.Data;
 
 @Data
 public class LeaveVO {
-
+	
+	// 입사일 
+	private Date emp_start_date;
     // 휴가번호
     private int leave_id; // leaveId
 

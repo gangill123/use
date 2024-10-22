@@ -740,7 +740,7 @@ function submitBusinessTrip() {
     <h1 class="text-3xl font-bold mb-6 text-center">사원 정보</h1>
     <div class="flex justify-center mb-6">
         <div class="w-40 h-40 bg-gray-200 rounded-md flex items-center justify-center">
-            <span class="text-gray-500">img</span>
+            <span class="text-gray-500">${sessionScope.emp_profile}</span>
         </div>
     </div>
     <div class="space-y-4">

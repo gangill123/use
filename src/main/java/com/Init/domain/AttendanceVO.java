@@ -11,7 +11,7 @@ import lombok.Data;
 public class AttendanceVO {
 	
 	
-	
+	private String emp_profile;
 	private String emp_job;
 
 	private String emp_position;

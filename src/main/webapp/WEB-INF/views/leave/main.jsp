@@ -171,12 +171,12 @@
 			<div class="form-group">
 			    <label for="expiry">연차 소멸:</label>
 			    <input type="number" id="expiry" name="expiry" class="form-control" 
-			           value="-1" readonly required> <!-- 기본값 설정 -->
+			           value="0" readonly required> <!-- 기본값 설정 -->
 			</div>
 			<div class="form-group">
 			    <label for="adjustment">연차 조정:</label>
 			    <input type="number" id="adjustment" name="adjustment" class="form-control" 
-			           value="1" readonly required> <!-- 기본값 설정 -->
+			           readonly required> <!-- 기본값 설정 -->
 			</div>
             <div class="form-group">
                 <label for="leaveType">휴가 종류:</label>
@@ -220,14 +220,18 @@ function closeLeaveModal() {
     document.getElementById("leaveModal").style.display = "none";
 }
 
-// 사용 연차 입력 시 잔여 연차 자동 계산
+// 사용 연차 입력 시 잔여 연차 및 조정 연차 자동 계산
 document.getElementById("usedLeave").addEventListener("input", function() {
-    const totalLeave = parseInt(document.getElementById("totalLeave").value);
+    const totalLeave = parseInt(document.getElementById("totalLeave").value) || 0;
     const usedLeave = parseInt(this.value) || 0; // 현재 입력된 값 또는 0
     const remainingLeave = totalLeave - usedLeave;
 
-    // 잔여 연차를 업데이트
-    document.getElementById("remainingLeave").value = remainingLeave >= 0 ? remainingLeave : 0; // 잔여 연차가 음수가 되지 않도록
+    // 잔여 연차 업데이트
+    document.getElementById("remainingLeave").value = remainingLeave < 0 ? 0 : remainingLeave;
+
+    // 조정 연차 계산 (조정 연차는 사용 연차와 같고 음수로 설정)
+    const adjustedLeave = -usedLeave; // 사용 연차를 음수로 변환
+    document.getElementById("adjustment").value = adjustedLeave; // 조정 연차 업데이트
 });
 
 // 연차 신청서 제출 함수

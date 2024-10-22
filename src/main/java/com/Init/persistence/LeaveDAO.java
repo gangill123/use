@@ -1,5 +1,6 @@
 package com.Init.persistence;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -36,5 +37,9 @@ public interface LeaveDAO {
 
 	void updateLeaveInfo(LeaveVO leaveVO);
 	
-	
+	  // 사원의 입사일을 조회하는 메서드
+	List<LeaveVO> getEmpStartDate(String emp_id) ;
+
+    // 연차 생성 및 업데이트 메서드
+    void updateAnnualLeave(String emp_id) ;
 }

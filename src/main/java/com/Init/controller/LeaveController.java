@@ -1,5 +1,6 @@
 package com.Init.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +51,15 @@ public class LeaveController {
 		logger.debug(" /views/leave/mainAdmin.jsp 뷰페이지 연결");
 
 		return "leave/mainAdmin";
+
+	}
+	
+	@RequestMapping(value = "/AdminAnnual", method = RequestMethod.GET)
+	public String AdminAnnualPage() {
+		logger.debug(" /main -> AdminAnnualPage() 실행");
+		logger.debug(" /views/leave/AdminAnnual.jsp 뷰페이지 연결");
+
+		return "leave/AdminAnnual";
 
 	}
 
@@ -161,6 +170,42 @@ public class LeaveController {
 	        // emp_id를 기반으로 휴가 정보 조회
 	        return leaveService.getLeaveStatus(emp_id);
 	    }
-	 
+	
+	    
+	    
+	    
+	    @GetMapping("/getAnnualLeave")
+	    @ResponseBody
+	    public List<LeaveVO> getAnnualLeave(@RequestParam("emp_id") String emp_id) {
+	        List<LeaveVO> leaveList = new ArrayList<>();
+	        try {
+	            // 사원의 연차 정보를 조회
+	            leaveList = leaveService.getAnnualLeaveByEmpId(emp_id); // 반환된 리스트를 직접 사용
+	        } catch (Exception e) {
+	            // 예외 처리
+	            System.err.println("Error retrieving annual leave: " + e.getMessage());
+	        }
+	        return leaveList; // LeaveVO 리스트를 JSON으로 반환
+	    }
+	    
+	    
+	 // 연차생성
+	    @PostMapping("/generateAnnualLeave")
+	    @ResponseBody
+	    public List<LeaveVO> generateAnnualLeave(@RequestParam("emp_id") String emp_id) {
+	        List<LeaveVO> leaveList = new ArrayList<>(); // 반환할 리스트 초기화
+	        try {
+	            // 연차 생성 서비스 호출
+	            leaveService.generateAnnualLeave(emp_id);
+
+	            // 생성 후 연차 정보를 다시 조회
+	            leaveList = leaveService.getAnnualLeaveByEmpId(emp_id); // 반환된 리스트를 직접 사용
+	        } catch (Exception e) {
+	            // 예외 처리
+	            System.err.println("Error generating annual leave: " + e.getMessage());
+	            leaveList = new ArrayList<>(); // 오류 발생 시 빈 리스트 반환
+	        }
+	        return leaveList; // LeaveVO 리스트를 JSON으로 반환
+	    }
 
 }

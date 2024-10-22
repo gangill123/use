@@ -103,6 +103,13 @@
                         <span class="sub-item">휴가 관리(관리자)</span>
                       </a>
                     </li>
+                    
+                    <li>
+                      <a href="<%= request.getContextPath() %>/leave/AdminAnnual">
+                        <span class="sub-item">연차 조회/생성(관리자)</span>
+                      </a>
+                    </li>
+                    
                   </ul>
                 </div>
               </li>

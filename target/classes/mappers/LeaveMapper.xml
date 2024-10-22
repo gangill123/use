@@ -190,6 +190,30 @@
 		WHERE emp_id = #{emp_id};
 	</select>
 	
+	<!-- 사원의 입사일 및 연차 정보를 조회하는 쿼리 -->
+    <select id="getEmpStartDate" resultType="com.Init.domain.LeaveVO">
+        SELECT 
+            e.emp_start_date,    <!-- 사원의 입사일 -->
+            l.emp_id,            <!-- 연차 테이블의 사원 번호 -->
+            l.total_annual_leave, 
+            l.used_annual_leave, 
+            l.remaining_annual_leave, 
+            l.lgrant, 
+            l.adjustmentDate
+        FROM employee e
+        LEFT JOIN leave_management l ON e.emp_id = l.emp_id
+        WHERE e.emp_id = #{emp_id}
+    </select>
+
+    <!-- 연차 생성 및 업데이트 쿼리 -->
+    <update id="updateAnnualLeave" parameterType="String">
+      UPDATE leave_management
+	    SET total_annual_leave = 15,
+	        remaining_annual_leave = 15,
+	        lgrant = 15,
+	        adjustmentDate = NOW() 
+	    WHERE emp_id = #{emp_id}
+    </update>
 	
 
 

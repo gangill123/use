@@ -110,5 +110,15 @@ public class LeaveDAOImpl implements LeaveDAO {
 	        sqlSession.update(NAMESPACE+".updateLeaveInfo", leaveVO); // 매퍼 쿼리 호출
 	    }
 	
-	
+	  // 사원의 입사일을 조회하는 메서드
+	    @Override
+	    public List<LeaveVO> getEmpStartDate(String emp_id){
+	        return sqlSession.selectList(NAMESPACE + ".getEmpStartDate", emp_id);
+	    }
+
+	    // 연차 생성 및 업데이트 메서드
+	    @Override
+	    public void updateAnnualLeave(String emp_id) {
+	        sqlSession.update(NAMESPACE + ".updateAnnualLeave", emp_id);
+	    }
 }

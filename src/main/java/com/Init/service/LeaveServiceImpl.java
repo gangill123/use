@@ -1,8 +1,10 @@
 package com.Init.service;
 
-import java.util.HashMap;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -78,4 +80,21 @@ public class LeaveServiceImpl implements LeaveService {
 		// Mapper를 통해 데이터베이스에서 정보를 조회
 		return leaveDAO.findLeaveByEmpId(emp_id);
 	}
+	
+	 @Override
+	    public void generateAnnualLeave(String emp_id) {
+		
+		
+		 leaveDAO.updateAnnualLeave(emp_id);
+	    }
+	 
+	 
+	 //연차 조회
+	  @Override
+	    public List<LeaveVO> getAnnualLeaveByEmpId(String emp_id) {
+	        return leaveDAO.getEmpStartDate(emp_id);
+	    } 	
+	
+	
+	
 }

@@ -235,11 +235,14 @@
 
 	<select id="getEmployee" parameterType="String"
 		resultType="com.Init.domain.AttendanceVO">
-		SELECT emp_job, emp_position, emp_name
+		SELECT emp_job, emp_position, emp_name, emp_profile
 		FROM employee
 		WHERE emp_id = #{emp_id}
 	</select>
 
 
+	
+    
+    
 
 </mapper>
