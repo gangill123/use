@@ -29,8 +29,18 @@ public class LeaveDAOImpl implements LeaveDAO {
 	private static final Logger logger = LoggerFactory.getLogger(LeaveDAOImpl.class);
 
 	@Override
-	public List<LeaveVO> getAllLeaves(String emp_id) {
-		return sqlSession.selectList(NAMESPACE + ".getAllLeaves", emp_id);
+	public List<LeaveVO> getAllLeaves(String emp_id, String leave_start_date, String annual_leave_start_date) {
+		  Map<String, Object> params = new HashMap<>();
+	        params.put("emp_id", emp_id);
+	        params.put("leave_start_date", leave_start_date);
+	        params.put("annual_leave_start_date", annual_leave_start_date);
+	        
+	        logger.debug("emp_id: " + emp_id);
+	        logger.debug("leave_start_date: " + leave_start_date);
+	        logger.debug("annual_leave_start_date: " + annual_leave_start_date);
+		
+		
+		return sqlSession.selectList(NAMESPACE + ".getAllLeaves", params);
 	}
 
 	@Override

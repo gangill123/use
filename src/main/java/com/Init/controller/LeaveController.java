@@ -55,13 +55,22 @@ public class LeaveController {
 	}
 
 	// 사원 ID로 휴가 조회
+	// 사원 ID로 휴가 조회
 	@GetMapping("/leaveSelect")
-	public ResponseEntity<List<LeaveVO>> getAllLeaves(@RequestParam String emp_id) {
-		logger.debug("사원 ID로 휴가 조회: " + emp_id);
-		List<LeaveVO> leaves = leaveService.getAllLeaves(emp_id);
-		return ResponseEntity.ok(leaves);
-	}
+	public ResponseEntity<List<LeaveVO>> getAllLeaves(
+	        @RequestParam String emp_id, 
+	        @RequestParam(required = false) String leave_start_date, // 휴가 시작 날짜
+	        @RequestParam(required = false) String annual_leave_start_date) { // 연차 시작 날짜
 
+	    logger.debug("사원 ID로 휴가 조회: " + emp_id);
+	    logger.debug("휴가 시작 날짜: " + leave_start_date);
+	    logger.debug("연차 시작 날짜: " + annual_leave_start_date);
+
+	    List<LeaveVO> leaves = leaveService.getAllLeaves(emp_id, leave_start_date, annual_leave_start_date);
+	    return ResponseEntity.ok(leaves);
+	}
+	
+	
 	// 휴가 수정 정보를 가져오기
 	@GetMapping("/selectUpdate") // 오타 수정: 'seletUpdate' -> 'selectUpdate'
 	public ResponseEntity<LeaveVO> getLeaveById(@RequestParam int leave_id) {

@@ -9,11 +9,16 @@
 
 
 
-	<select id="getAllLeaves" resultType="com.Init.domain.LeaveVO">
-		SELECT *
-		FROM
-		leave_management
-		WHERE emp_id = #{emp_id}
+	<select id="getAllLeaves" parameterType="map" resultType="com.Init.domain.LeaveVO">
+	   SELECT * FROM leave_management
+        WHERE emp_id = #{emp_id}
+        <if test="leave_start_date != null and leave_start_date != ''">
+            AND leave_start_date = #{leave_start_date}
+        </if>
+        <if test="annual_leave_start_date != null and annual_leave_start_date != ''">
+            AND annual_leave_start_date = #{annual_leave_start_date}
+        </if>
+            
 	</select>
 
 	<select id="selectLeaveById" parameterType="int"

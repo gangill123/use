@@ -6,7 +6,7 @@ import com.Init.domain.LeaveVO;
 
 public interface LeaveService {
 
-	List<LeaveVO> getAllLeaves(String emp_id);
+	List<LeaveVO> getAllLeaves(String emp_id, String leave_start_date, String annual_leave_start_date);
 
 	LeaveVO getLeaveById(int leave_id);
 

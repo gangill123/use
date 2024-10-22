@@ -9,7 +9,7 @@ import com.Init.domain.LeaveVO;
 
 public interface LeaveDAO {
 
-	List<LeaveVO> getAllLeaves(String emp_id);
+	List<LeaveVO> getAllLeaves(String emp_id, String leave_start_date, String annual_leave_start_date);
 
 	LeaveVO selectLeaveById(int leave_id);
 

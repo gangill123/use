@@ -1,7 +1,8 @@
 package com.Init.service;
 
-import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -24,10 +25,18 @@ public class LeaveServiceImpl implements LeaveService {
 	@Autowired
 	private LeaveService leaveService;
 
-	public List<LeaveVO> getAllLeaves(String emp_id) {
-		return leaveDAO.getAllLeaves(emp_id);
-	}
-
+	  @Override
+	    public List<LeaveVO> getAllLeaves(String emp_id, String leave_start_date, String annual_leave_start_date) {
+		  // 로그 출력
+		    logger.debug("emp_id: " + emp_id);
+		    logger.debug("leave_start_date: " + leave_start_date);
+		    logger.debug("annual_leave_start_date: " + annual_leave_start_date);
+		    
+		    // DAO 호출, 각 인자를 직접 전달
+		    return leaveDAO.getAllLeaves(emp_id, leave_start_date, annual_leave_start_date); // 세 개의 String 인자를 사용
+	    }
+	  
+	  
 	@Override
 	public LeaveVO getLeaveById(int leave_id) {
 		return leaveDAO.selectLeaveById(leave_id);

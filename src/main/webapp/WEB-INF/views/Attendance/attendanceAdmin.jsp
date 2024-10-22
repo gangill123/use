@@ -135,16 +135,17 @@
                         
 
  
+   <form>
     <div class="d-flex align-items-center">
-     	<label class="me-2">사원번호 :</label>
-         <input type="text" class="form-control me-2" id="emp_id" placeholder="사원 ID를 입력하세요" required style="width: 200px;">
+        <label class="me-2">사원번호 :</label>
+        <input type="text" class="form-control me-2" id="emp_id" name="emp_id" placeholder="사원 ID를 입력하세요" required style="width: 200px;">
         
-          <label class="me-2">근태 날짜 조회 :</label>
-    		<input type="date" class="form-control me-2" id="selectedDate" required style="width: 200px;">
-     
+        <label class="me-2">근태 날짜 조회 :</label>
+        <input type="date" class="form-control me-2" id="selectedDate" name="leave_start_date" required style="width: 200px;">
         
-        <button id="checkTimeButton" class="btn btn-info">사원 근태 조회</button> <!-- CSS 클래스 적용 -->
-	</div>       
+        <button type="submit" id="checkTimeButton" class="btn btn-info">사원 근태 조회</button>
+    </div>
+</form>     
    
 <br>
 <br>

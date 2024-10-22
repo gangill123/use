@@ -113,14 +113,26 @@
                     <!-- 새로운 사원 휴가 관리 테이블 -->
                     <div class="mt-5" style="margin: 0; padding: 0;">
                         <h1>사원 휴가 관리(관리자)</h1>
+                        
+                        
                         <br>
                         <br>
                         
  <div class="d-flex align-items-center">
-    
-        <input type="text" class="form-control me-2" id="emp_id" placeholder="사원 ID를 입력하세요" required style="width: 200px;">
-        <button id="checkLeavesButton" class="btn btn-info">사원 휴가 조회</button> <!-- CSS 클래스 적용 -->
+  
+			<label class="me-2">사원 ID:</label>
+			<input type="text" class="form-control me-2" id="emp_id" placeholder="사원 ID를 입력하세요" required style="width: 200px;">
+			
+			<label class="me-2">휴가 시작 날짜:</label>
+			<input type="date" class="form-control me-2" id="leave_start_date" style="width: 200px;">
+			
+			<label class="me-2">연차 시작 날짜:</label>
+			<input type="date" class="form-control me-2" id="annual_leave_start_date" style="width: 200px;">
+			
+			<button id="checkLeavesButton" class="btn btn-info">사원 휴가 조회</button>
    
+   		   
+   			
 </div>         
                         <br>
                         <br>
@@ -335,77 +347,86 @@ $(document).ready(function() {
 	
     // 휴가 데이터 로드 함수
     function loadLeaveData() {
-        var empId = $("#emp_id").val(); // 입력된 사원 ID 가져오기
+    var empId = $("#emp_id").val(); // 입력된 사원 ID 가져오기
+    var leaveStartDate = $("#leave_start_date").val(); // 입력된 휴가 시작 날짜 가져오기
+    var annualLeaveStartDate = $("#annual_leave_start_date").val(); // 입력된 연차 시작 날짜 가져오기
+	
+    // 날짜 값 로그로 출력 (디버깅 용)
+    console.log("사원 ID:", empId);
+    console.log("휴가 시작 날짜:", leaveStartDate);
+    console.log("연차 시작 날짜:", annualLeaveStartDate);
+    
+    // AJAX 요청
+    $.ajax({
+        url: 'leaveSelect', // 요청 URL
+        type: 'GET',
+        data: { 
+        	 emp_id: empId,
+        	 leave_start_date: leaveStartDate || null, // 비어있을 경우 null로 설정
+             annual_leave_start_date: annualLeaveStartDate || null // 비어있을 경우 null로 설정
+        },
+        success: function(response) {
+            var leaves = response; // 조회된 데이터
+            $("#checkLeaveList").empty(); // 기존 데이터 초기화
 
-        // AJAX 요청
-        $.ajax({
-            url: 'leaveSelect', // 요청 URL
-            type: 'GET',
-            data: { 
-                emp_id: empId
-            },
-            success: function(response) {
-                var leaves = response; // 조회된 데이터
-                $("#checkLeaveList").empty(); // 기존 데이터 초기화
-
-                // 조회된 데이터를 테이블에 추가
-                if (leaves.length > 0) {
-                    $.each(leaves, function(index, leave) {
-                    	   $("#checkLeaveList").append(
-                    			   "<tr>" +
-                    			    "<td>" + (leave.leave_id || "-") + "</td>" +
-                    			    "<td>" + (leave.emp_id || "-") + "</td>" +
-                    			    "<td>" + (leave.leave_type || "-") + "</td>" +
-                    			    "<td>" + (leave.leave_start_date || "-") + "</td>" +
-                    			    "<td>" + (leave.end_leave_date || "-") + "</td>" +
-                    			    "<td>" + (leave.t_leave || "-") + "</td>" +
-                    			    "<td>" + (leave.total_leave_days || "-") + "</td>" +
-                    			    "<td>" + (leave.used_leave || "-") + "</td>" +
-                    			    "<td>" + (leave.remaining_leave || "-") + "</td>" +
-                    			    "<td>" + (leave.annual_leave_start_date || "-") + "</td>" +
-                    			    "<td>" + (leave.end_annual_leave || "-") + "</td>" +
-                    			    "<td>" + (leave.total_annual_leave || "-") + "</td>" +
-                    			    "<td>" + (leave.used_annual_leave || "-") + "</td>" +
-                    			    "<td>" + (leave.remaining_annual_leave || "-") + "</td>" +
-                    			    "<td>" + (leave.leave_status || "-") + "</td>" +
-                    			    "<td>" + (leave.reason || "-") + "</td>" +
-                    			    "<td>" + (leave.requested_at || "-") + "</td>" +
-                    			    "<td>" + (leave.approval_date || "-") + "</td>" +
-                    			    "<td>" +
-                    			        "<button class='btn btn-warning edit-button' data-id='" + leave.leave_id + "' " +
-                    			        "data-leave-type='" + leave.leave_type + "' " +
-                    			        "data-leave-start-date='" + leave.leave_start_date + "' " +
-                    			        "data-end-leave-date='" + leave.end_leave_date + "' " +
-                    			        "data-total-leave-days='" + leave.total_leave_days + "' " +
-                    			        "data-used-leave='" + leave.used_leave + "' " +
-                    			        "data-remaining-leave='" + leave.remaining_leave + "' " +
-                    			        "data-t-leave='" + leave.t_leave + "' " +
-                    			        "data-annual-leave-start-date='" + leave.annual_leave_start_date + "' " +
-                    			        "data-end-annual-leave='" + leave.end_annual_leave + "' " +
-                    			        "data-total-annual-leave='" + leave.total_annual_leave + "' " +
-                    			        "data-used-annual-leave='" + leave.used_annual_leave + "' " +
-                    			        "data-remaining-annual-leave='" + leave.remaining_annual_leave + "' " +
-                    			        "data-leave-status='" + leave.leave_status + "' " +
-                    			        "data-reason='" + leave.reason + "' " +
-                    			        ">수정</button>" +
-                    			    "</td>" +
-                    			    "<td>" +
-                    			        "<button type='button' class='btn btn-danger delete-button' data-id='" + leave.leave_id + "'>삭제</button>" +
-                    			    "</td>" +
-                    			"</tr>"
-                        );
-                    });
-                } else {
-                    $("#checkLeaveList").append("<tr><td colspan='17'>조회된 데이터가 없습니다.</td></tr>");
-                }
+            // 조회된 데이터를 테이블에 추가
+            if (leaves.length > 0) {
+                $.each(leaves, function(index, leave) {
+                    $("#checkLeaveList").append(
+                        "<tr>" +
+                        "<td>" + (leave.leave_id || "-") + "</td>" +
+                        "<td>" + (leave.emp_id || "-") + "</td>" +
+                        "<td>" + (leave.leave_type || "-") + "</td>" +
+                        "<td>" + (leave.leave_start_date || "-") + "</td>" +
+                        "<td>" + (leave.end_leave_date || "-") + "</td>" +
+                        "<td>" + (leave.t_leave || "-") + "</td>" +
+                        "<td>" + (leave.total_leave_days || "-") + "</td>" +
+                        "<td>" + (leave.used_leave || "-") + "</td>" +
+                        "<td>" + (leave.remaining_leave || "-") + "</td>" +
+                        "<td>" + (leave.annual_leave_start_date || "-") + "</td>" +
+                        "<td>" + (leave.end_annual_leave || "-") + "</td>" +
+                        "<td>" + (leave.total_annual_leave || "-") + "</td>" +
+                        "<td>" + (leave.used_annual_leave || "-") + "</td>" +
+                        "<td>" + (leave.remaining_annual_leave || "-") + "</td>" +
+                        "<td>" + (leave.leave_status || "-") + "</td>" +
+                        "<td>" + (leave.reason || "-") + "</td>" +
+                        "<td>" + (leave.requested_at || "-") + "</td>" +
+                        "<td>" + (leave.approval_date || "-") + "</td>" +
+                        "<td>" +
+                            "<button class='btn btn-warning edit-button' data-id='" + leave.leave_id + "' " +
+                            "data-leave-type='" + leave.leave_type + "' " +
+                            "data-leave-start-date='" + leave.leave_start_date + "' " +
+                            "data-end-leave-date='" + leave.end_leave_date + "' " +
+                            "data-total-leave-days='" + leave.total_leave_days + "' " +
+                            "data-used-leave='" + leave.used_leave + "' " +
+                            "data-remaining-leave='" + leave.remaining_leave + "' " +
+                            "data-t-leave='" + leave.t_leave + "' " +
+                            "data-annual-leave-start-date='" + leave.annual_leave_start_date + "' " +
+                            "data-end-annual-leave='" + leave.end_annual_leave + "' " +
+                            "data-total-annual-leave='" + leave.total_annual_leave + "' " +
+                            "data-used-annual-leave='" + leave.used_annual_leave + "' " +
+                            "data-remaining-annual-leave='" + leave.remaining_annual_leave + "' " +
+                            "data-leave-status='" + leave.leave_status + "' " +
+                            "data-reason='" + leave.reason + "' " +
+                            ">수정</button>" +
+                        "</td>" +
+                        "<td>" +
+                            "<button type='button' class='btn btn-danger delete-button' data-id='" + leave.leave_id + "'>삭제</button>" +
+                        "</td>" +
+                        "</tr>"
+                    );
+                });
+            } else {
+                $("#checkLeaveList").append("<tr><td colspan='17'>조회된 데이터가 없습니다.</td></tr>");
             }
-        });
-    }
-
-    // 버튼 클릭 시 휴가 조회
-    $("#checkLeavesButton").click(function() {
-        loadLeaveData(); // 데이터 로드
+        }
     });
+}
+
+// 버튼 클릭 시 휴가 조회
+$("#checkLeavesButton").click(function() {
+    loadLeaveData(); // 데이터 로드
+});
 
     // 수정 버튼 클릭 시 모달에 데이터 설정
     $(document).on('click', '.edit-button', function() {
