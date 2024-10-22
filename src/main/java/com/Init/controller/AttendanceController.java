@@ -156,16 +156,24 @@ public class AttendanceController {
 	}
 	@RequestMapping(value = "attendanceData", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> getPagedCheckTime(@RequestParam("emp_id") String emp_id,  	                                             
-	                                             @RequestParam("page") int page,
-	                                             @RequestParam("size") int size,
-	                                             @RequestParam(value = "date", required = false) String date ) {
+	public Map<String, Object> getPagedCheckTime(
+	        @RequestParam("emp_id") String emp_id,                                             
+	        @RequestParam("page") int page,
+	        @RequestParam("size") int size,
+	        @RequestParam(value = "date", required = false) String date) {
 
 	    // 페이지 인덱스 계산 (0부터 시작하므로)
 	    int offset = (page - 1) * size;
 
-	    // 날짜와 함께 필터링된 페이징된 데이터 가져오기
-	    List<AttendanceVO> attendanceList = attendanceService.getAllCheckTime(emp_id, offset, size, date);
+	    List<AttendanceVO> attendanceList;
+	    
+	    // 날짜가 없을 경우 전체 출석 기록 가져오기
+	    if (date == null || date.isEmpty()) {
+	        attendanceList = attendanceService.getAllCheckTime(emp_id, offset, size, null); // null을 전달하여 전체 데이터 가져오기
+	    } else {
+	        attendanceList = attendanceService.getAllCheckTime(emp_id, offset, size, date); // 날짜에 따라 필터링된 데이터 가져오기
+	    }
+
 	    System.out.println("Retrieved attendanceList: " + attendanceList);
 
 	    // 총 근태 항목 수 계산 (날짜 필터링 적용)
