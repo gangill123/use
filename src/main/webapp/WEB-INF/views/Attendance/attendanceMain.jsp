@@ -684,7 +684,7 @@ function submitBusinessTrip() {
             education_endDate: educationEndDate,
             workform_status: workformStatus,
             modified_reason: reason,
-            status: "진행 중" // 고정된 상태값
+            status: status // 고정된 상태값
         }),
         success: function(response) {
             alert('신청이 완료되었습니다!');

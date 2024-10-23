@@ -61,4 +61,6 @@ public class AttendanceVO {
     private Date educationDate; // 교육 출장 날짜
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date education_endDate; // 교육 출장 날짜
+    
+   
 }
