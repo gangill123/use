@@ -166,7 +166,7 @@
 			<div class="form-group">
 			    <label for="lgrant">연차 부여:</label>
 			    <input type="number" id="lgrant" name="lgrant" class="form-control" 
-			           value="15" readonly required> <!-- 기본값 설정 -->
+			           value="0" readonly required> <!-- 기본값 설정 -->
 			</div>
 			<div class="form-group">
 			    <label for="expiry">연차 소멸:</label>
@@ -673,10 +673,11 @@ document.getElementById("end_leave_date").addEventListener("change", calculateTo
                                 <th>총 연차 일수</th>
                                 <th>사용 연차</th>
                                 <th>잔여 연차</th>
-                                <th>휴가 신청일수</th>
+                                <th>총 휴가 일수</th>
                                 <th>휴가 유형</th>
                                 <th>휴가 시작일</th>
                                 <th>휴가 종료일</th>
+                                <th>신청일</th>                                
                                 <th>승인 상태</th>
                             </tr>
                         </thead>
@@ -752,6 +753,7 @@ function getAttendanceStatusDisplay(leave_status) {
                 "<td>" + (leave.leave_type || "-") + "</td>" +  // leave_type가 null일 경우 "없음" 표시
                 "<td>" + (leave.leave_start_date || "-") + "</td>" +  // leave_start_date가 null일 경우 "없음" 표시
                 "<td>" + (leave.end_leave_date || "-") + "</td>" +  // end_leave_date가 null일 경우 "없음" 표시
+                "<td>" + (leave.requested_at || "-") + "</td>" + // requested_at이 null일 경우 "없음" 표시
                 "<td>" + (getAttendanceStatusDisplay(leave.leave_status) || "-") + "</td>" + // leave_status에 따른 상태 표시
             "</tr>"; // 행을 닫음
         });
@@ -916,7 +918,7 @@ function getAttendanceStatusDisplay(leave_status) {
 				let hasValidData = false; // 유효한 데이터가 있는지 체크하는 플래그
 				data.forEach(function(leave) {
 				    // 연차 시작 날짜가 있는 경우에만 데이터를 체크
-				    if (leave.annual_leave_start_date) {
+				    if (leave.total_annual_leave) {
 				        // 각 leave 정보의 필드를 체크하여 유효한 데이터인지 확인
 				        if (leave.lgrant || leave.total_annual_leave || 
 				            leave.expiry || leave.adjustment || leave.used_annual_leave || 
@@ -924,7 +926,7 @@ function getAttendanceStatusDisplay(leave_status) {
 				            hasValidData = true; // 유효한 데이터가 있는 경우 플래그를 true로 변경
 				            $('#leaveTableBody').append(
 				                '<tr>' +
-				                    '<td>' + leave.annual_leave_start_date + '</td>' +
+				                    '<td>' + (leave.annual_leave_start_date || '-') + '</td>' +
 				                    '<td>' + (leave.lgrant || '-') + '</td>' +
 				                    '<td>' + (leave.total_annual_leave || '-') + '</td>' +
 				                    '<td>' + (leave.expiry || '-') + '</td>' +

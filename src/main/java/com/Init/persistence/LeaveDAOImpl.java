@@ -121,4 +121,15 @@ public class LeaveDAOImpl implements LeaveDAO {
 	    public void updateAnnualLeave(String emp_id) {
 	        sqlSession.update(NAMESPACE + ".updateAnnualLeave", emp_id);
 	    }
+	    @Override
+	    public void insertAnnualLeave(String emp_id) {
+	        sqlSession.insert(NAMESPACE +".insertAnnualLeave", emp_id);
+	    }
+	    // 사원의 입사일을 조회하는 메서드
+	    @Override
+	    public List<LeaveVO> getStartDate(String emp_id){
+	        return sqlSession.selectList(NAMESPACE + ".getEmpStartDate", emp_id);
+	    }
+
+	    
 }

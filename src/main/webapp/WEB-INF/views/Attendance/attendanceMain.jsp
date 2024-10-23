@@ -949,15 +949,40 @@ $(document).ready(function() {
 });
 
 function determineWorkStatus(checkInTime, checkOutTime) {
-    // 오전 9시를 기준으로 출근 시간을 확인
-    const nineAM = new Date(checkInTime);
+    const checkInDate = new Date(checkInTime);
+    const checkOutDate = new Date(checkOutTime);
+    
+    // 현재 로컬 시간 기준으로 오전 7시와 오후 6시 설정
+    const sevenAM = new Date(checkInDate);
+    sevenAM.setHours(7, 0, 0, 0); // 오전 7시로 설정
+    
+    const nineAM = new Date(checkInDate);
     nineAM.setHours(9, 0, 0, 0); // 오전 9시로 설정
-
-    if (checkInTime < nineAM) {
-        return "정상 출근"; // 오전 9시 이전 출근
-    } else {
-        return "지각"; // 오전 9시 이후 출근
+    
+    const sixPM = new Date(checkInDate);
+    sixPM.setHours(18, 0, 0, 0); // 오후 6시로 설정
+    
+    const tenPM = new Date(checkInDate);
+    tenPM.setHours(22, 0, 0, 0); // 오후 10시로 설정
+    
+    // 오전 7시부터 9시 이전 출근
+    if (checkInDate >= sevenAM && checkInDate < nineAM) {
+        return "정상 출근"; // 정상 출근
     }
+    // 오전 9시 이후부터 오후 6시까지 출근
+    else if (checkInDate >= nineAM && checkInDate <= sixPM) {
+        return "지각"; // 지각
+    }
+    // 오후 6시부터 24시까지는 초과근무
+    else if (checkInDate > sixPM && checkInDate <= new Date(checkInDate.setHours(24))) {
+        return "초과 근무"; // 초과 근무
+    }
+    // 오후 10시부터 다음날 오전 7시까지 출근
+    else if (checkInDate >= tenPM || checkInDate < sevenAM) {
+        return "야간 근무"; // 야간 근무
+    }
+    // 기본적으로 아무 조건에도 해당하지 않을 경우
+    return "근무 상태 확인 필요";
 }
 </script>
     

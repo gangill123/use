@@ -42,4 +42,8 @@ public interface LeaveDAO {
 
     // 연차 생성 및 업데이트 메서드
     void updateAnnualLeave(String emp_id) ;
+    
+    void insertAnnualLeave(String emp_id);
+    
+    public List<LeaveVO> getStartDate(String emp_id);
 }

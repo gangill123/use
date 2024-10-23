@@ -9,16 +9,18 @@
 
 
 
-	<select id="getAllLeaves" parameterType="map" resultType="com.Init.domain.LeaveVO">
-	   SELECT * FROM leave_management
-        WHERE emp_id = #{emp_id}
-        <if test="leave_start_date != null and leave_start_date != ''">
-            AND leave_start_date = #{leave_start_date}
-        </if>
-        <if test="annual_leave_start_date != null and annual_leave_start_date != ''">
-            AND annual_leave_start_date = #{annual_leave_start_date}
-        </if>
-            
+	<select id="getAllLeaves" parameterType="map"
+		resultType="com.Init.domain.LeaveVO">
+		SELECT * FROM leave_management
+		WHERE emp_id = #{emp_id}
+		<if test="leave_start_date != null and leave_start_date != ''">
+			AND leave_start_date = #{leave_start_date}
+		</if>
+		<if
+			test="annual_leave_start_date != null and annual_leave_start_date != ''">
+			AND annual_leave_start_date = #{annual_leave_start_date}
+		</if>
+
 	</select>
 
 	<select id="selectLeaveById" parameterType="int"
@@ -105,35 +107,35 @@
 	<insert id="insertLeaveRequest"
 		parameterType="com.Init.domain.LeaveVO">
 		INSERT INTO leave_management (
-	          emp_id,
-            leave_type,
-            annual_leave_start_date,           
-            end_annual_leave,
-            used_annual_leave,
-            total_annual_leave,
-            remaining_annual_leave,
-            lgrant,
-            expiry,
-            adjustment,
-            leave_status,
-            reason,
-            requested_at
-        ) VALUES (
-            #{emp_id},
-            #{leave_type},
-            #{annual_leave_start_date},
-            #{end_annual_leave},
-            #{used_annual_leave},
-            #{total_annual_leave},
-            #{remaining_annual_leave},
-            #{lgrant},
-            #{expiry},
-            #{adjustment},
-            #{leave_status},
-            #{reason},
-            #{requested_at}
-            
-        )
+		emp_id,
+		leave_type,
+		annual_leave_start_date,
+		end_annual_leave,
+		used_annual_leave,
+		total_annual_leave,
+		remaining_annual_leave,
+		lgrant,
+		expiry,
+		adjustment,
+		leave_status,
+		reason,
+		requested_at
+		) VALUES (
+		#{emp_id},
+		#{leave_type},
+		#{annual_leave_start_date},
+		#{end_annual_leave},
+		#{used_annual_leave},
+		#{total_annual_leave},
+		#{remaining_annual_leave},
+		#{lgrant},
+		#{expiry},
+		#{adjustment},
+		#{leave_status},
+		#{reason},
+		#{requested_at}
+
+		)
 	</insert>
 
 	<!-- 사원의 연차 정보를 가져오는 메서드 -->
@@ -168,9 +170,11 @@
 		leave_start_date,
 		end_leave_date, reason, total_leave_days,
 		leave_status,requested_at)
-		VALUES (#{emp_id}, #{leave_type}, #{leave_start_date},
+		VALUES (#{emp_id}, #{leave_type},
+		#{leave_start_date},
 		#{end_leave_date},
-		#{reason}, #{total_leave_days}, #{leave_status},#{requested_at});
+		#{reason}, #{total_leave_days},
+		#{leave_status},#{requested_at});
 	</insert>
 
 	<!--나의 휴가 현황 -->
@@ -183,40 +187,63 @@
 		remaining_annual_leave ,
 		total_leave_days ,
 		used_leave ,
-		remaining_leave ,
+		remaining_leave
+		,
 		leave_type ,
 		leave_start_date ,
 		end_leave_date,
+		requested_at,
 		leave_status
-		FROM leave_management
+		FROM
+		leave_management
 		WHERE emp_id = #{emp_id};
 	</select>
-	
+
 	<!-- 사원의 입사일 및 연차 정보를 조회하는 쿼리 -->
-    <select id="getEmpStartDate" resultType="com.Init.domain.LeaveVO">
-        SELECT 
-            e.emp_start_date,    <!-- 사원의 입사일 -->
-            l.emp_id,            <!-- 연차 테이블의 사원 번호 -->
-            l.total_annual_leave, 
-            l.used_annual_leave, 
-            l.remaining_annual_leave, 
-            l.lgrant, 
-            l.adjustmentDate
-        FROM employee e
-        LEFT JOIN leave_management l ON e.emp_id = l.emp_id
-        WHERE e.emp_id = #{emp_id}
-    </select>
+	<select id="getEmpStartDate"
+		resultType="com.Init.domain.LeaveVO">
+		SELECT
+		e.emp_start_date,
+		e.emp_id,
+		l.total_annual_leave,
+		l.used_annual_leave,
+		l.remaining_annual_leave,
+		l.lgrant,
+		l.adjustmentDate
+		FROM employee e
+		LEFT JOIN leave_management l
+		ON e.emp_id = l.emp_id
+		WHERE e.emp_id = #{emp_id}
+	</select>
 
-    <!-- 연차 생성 및 업데이트 쿼리 -->
-    <update id="updateAnnualLeave" parameterType="String">
-      UPDATE leave_management
-	    SET total_annual_leave = 15,
-	        remaining_annual_leave = 15,
-	        lgrant = 15,
-	        adjustmentDate = NOW() 
-	    WHERE emp_id = #{emp_id}
-    </update>
-	
+	<!-- 연차 생성 및 업데이트 쿼리 -->
+	<update id="updateAnnualLeave" parameterType="String">
+		UPDATE leave_management
+		SET total_annual_leave = 15,
+		remaining_annual_leave = 15,
+		lgrant = 15,
+		adjustmentDate = NOW()
+		WHERE emp_id = #{emp_id}
+	</update>
 
+	<insert id="insertAnnualLeave"
+		parameterType="com.Init.domain.LeaveVO">
+		INSERT INTO leave_management (emp_id, total_annual_leave,
+		remaining_annual_leave, lgrant, adjustmentDate, leave_status)
+		VALUES (#{emp_id}, 15, 15, 15, NOW(),2)
+	</insert>
+
+	<select id="getStartDate" resultType="com.Init.domain.LeaveVO">
+		SELECT
+		l.total_annual_leave,
+		l.used_annual_leave,
+		l.remaining_annual_leave,
+		l.lgrant,
+		l.adjustmentDate
+		FROM employee e
+		LEFT JOIN leave_management l
+		ON e.emp_id = l.emp_id
+		WHERE e.emp_id = #{emp_id}
+	</select>
 
 </mapper>
