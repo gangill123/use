@@ -187,17 +187,31 @@
 	<!-- 외출 시간 업데이트 쿼리 -->
 	<update id="updateWorkingOutsideTime"
 		parameterType="com.Init.domain.AttendanceVO">
-		UPDATE attendance_ch
-		SET workingOutside_time = #{WorkingOutside_time}
-		WHERE emp_id = #{emp_id} AND attendance_id = #{attendance_id}
+		   UPDATE attendance_ch
+		    SET workingOutside_time = #{WorkingOutside_time}
+		    WHERE emp_id = #{emp_id} 
+		      AND attendance_id = (
+		          SELECT MAX(attendance_id) 
+		          FROM (SELECT attendance_id 
+		                FROM attendance_ch 
+		                WHERE emp_id = #{emp_id} 
+		                AND check_in IS NOT NULL) AS temp
+      )
 	</update>
 
 	<!-- 복귀 시간 업데이트 쿼리 -->
 	<update id="updateReturnTime"
 		parameterType="com.Init.domain.AttendanceVO">
-		UPDATE attendance_ch
-		SET return_time = #{return_time}
-		WHERE emp_id = #{emp_id} AND attendance_id = #{attendance_id}
+		 UPDATE attendance_ch
+    SET return_time = #{return_time}
+    WHERE emp_id = #{emp_id} 
+      AND attendance_id = (
+          SELECT MAX(attendance_id) 
+          FROM (SELECT attendance_id 
+                FROM attendance_ch 
+                WHERE emp_id = #{emp_id} 
+                AND check_in IS NOT NULL) AS temp
+      )
 	</update>
 
 	<select id="getAttendanceByEmpId" parameterType="String"
