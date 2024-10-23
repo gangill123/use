@@ -249,6 +249,7 @@ function submitLeaveForm() {
     const leaveType = document.getElementById("leaveType").value;
     const leaveStatus = document.getElementById("leaveStatus").value;
     const reason = document.getElementById("reason").value;
+    const requestedAt = document.getElementById("requested_at").value; // 신청 날짜 및 시간 가져오기
 
     // 유효성 검사
     if (!annualLeaveStartDate || !endAnnualLeave) {
@@ -283,7 +284,8 @@ function submitLeaveForm() {
             adjustment: adjustment,
             leave_type: leaveType,
             leave_status: leaveStatus,
-            reason: reason
+            reason: reason,
+            requested_at: requestedAt
         }),
         success: function(response) {
             console.log("연차 신청이 완료되었습니다:", response);
@@ -431,6 +433,7 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
     const totalLeaveDays = document.getElementById("total_leave_days").value;
     const leaveStatus = document.getElementById("leave_status").value;
     const reason = document.getElementById("reason").value;
+    const requestedAt = document.getElementById("requested_at").value; // 신청 날짜 및 시간 가져오기
 
     // 서버에 데이터 전송하는 로직 추가 (AJAX 사용)
     $.ajax({
@@ -444,7 +447,8 @@ document.getElementById("leaveRequestForm").addEventListener("submit", function(
             end_leave_date: endLeaveDate,
             reason: reason,
             total_leave_days: totalLeaveDays,
-            leave_status: leaveStatus
+            leave_status: leaveStatus,
+            requested_at: requestedAt // 신청 날짜 및 시간 전송
         }),
         success: function(response) {
             // 요청이 성공했을 때의 처리
@@ -600,6 +604,7 @@ document.getElementById("end_leave_date").addEventListener("change", calculateTo
         const totalLeaveDays = document.getElementById("total_leave_days_leave").value;
         const leaveStatus = document.getElementById("leave_status_leave").value;
         const reason = document.getElementById("reason_leave").value;
+        const requestedAt = document.getElementById("requested_at").value; // 신청 날짜 및 시간 가져오기
 
         // 서버에 데이터 전송하는 로직 추가 (AJAX 사용)
         $.ajax({
@@ -613,7 +618,8 @@ document.getElementById("end_leave_date").addEventListener("change", calculateTo
                 end_leave_date: endLeaveDate,
                 reason: reason,
                 total_leave_days: totalLeaveDays,
-                leave_status: leaveStatus
+                leave_status: leaveStatus,
+                requested_at: requestedAt // 신청 날짜 및 시간 전송
             }),
             success: function(response) {
                 // 요청이 성공했을 때의 처리
@@ -667,9 +673,7 @@ document.getElementById("end_leave_date").addEventListener("change", calculateTo
                                 <th>총 연차 일수</th>
                                 <th>사용 연차</th>
                                 <th>잔여 연차</th>
-                                <th>총 휴가 일수</th>
-                                <th>사용한 휴가</th>
-                                <th>잔여 휴가</th>
+                                <th>휴가 신청일수</th>
                                 <th>휴가 유형</th>
                                 <th>휴가 시작일</th>
                                 <th>휴가 종료일</th>
@@ -744,9 +748,7 @@ function getAttendanceStatusDisplay(leave_status) {
                 "<td>" + (leave.total_annual_leave || "-") + "</td>" +  // total_annual_leave가 null일 경우 "없음" 표시
                 "<td>" + (leave.used_annual_leave || "-") + "</td>" +  // used_annual_leave가 null일 경우 "없음" 표시
                 "<td>" + (leave.remaining_annual_leave || "-") + "</td>" +  // remaining_annual_leave가 null일 경우 "없음" 표시
-                "<td>" + (leave.total_leave_days || "-") + "</td>" +  // total_leave_days가 null일 경우 "없음" 표시
-                "<td>" + (leave.used_leave || "-") + "</td>" +  // used_leave가 null일 경우 "없음" 표시
-                "<td>" + (leave.remaining_leave || "-") + "</td>" +  // remaining_leave가 null일 경우 "없음" 표시
+                "<td>" + (leave.total_leave_days || "-") + "</td>" +  // total_leave_days가 null일 경우 "없음" 표시           
                 "<td>" + (leave.leave_type || "-") + "</td>" +  // leave_type가 null일 경우 "없음" 표시
                 "<td>" + (leave.leave_start_date || "-") + "</td>" +  // leave_start_date가 null일 경우 "없음" 표시
                 "<td>" + (leave.end_leave_date || "-") + "</td>" +  // end_leave_date가 null일 경우 "없음" 표시

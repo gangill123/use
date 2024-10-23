@@ -25,9 +25,7 @@ public class LeaveVO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date leave_start_date; 
 
-    // 휴가 일수
-    private int t_leave; 
-
+    
     // 연차 관련 필드
     private int annual_leave; // annualLeave
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -66,9 +64,7 @@ public class LeaveVO {
 
     // 총 휴가 일수 관련 필드
     private int total_leave_days; 
-    private int used_leave; //사용하는 휴가
-    private int remaining_leave; 
-    
+  
    
     
     

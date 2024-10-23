@@ -116,7 +116,8 @@
             expiry,
             adjustment,
             leave_status,
-            reason
+            reason,
+            requested_at
         ) VALUES (
             #{emp_id},
             #{leave_type},
@@ -129,7 +130,8 @@
             #{expiry},
             #{adjustment},
             #{leave_status},
-            #{reason}
+            #{reason},
+            #{requested_at}
             
         )
 	</insert>
@@ -165,10 +167,10 @@
 		INSERT INTO leave_management (emp_id, leave_type,
 		leave_start_date,
 		end_leave_date, reason, total_leave_days,
-		leave_status)
+		leave_status,requested_at)
 		VALUES (#{emp_id}, #{leave_type}, #{leave_start_date},
 		#{end_leave_date},
-		#{reason}, #{total_leave_days}, #{leave_status});
+		#{reason}, #{total_leave_days}, #{leave_status},#{requested_at});
 	</insert>
 
 	<!--나의 휴가 현황 -->
