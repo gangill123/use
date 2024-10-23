@@ -326,6 +326,19 @@
             var empId = $("#emp_id").val(); // 입력된 사원 ID 가져오기
             var selectedDate = $("#selectedDate").val(); // 선택된 날짜 가져오기
 			
+         // 상태를 문자열로 변환하는 함수
+            function getAttendanceStatusDisplay(status) {
+                switch (status) {
+                    case 0:
+                        return '진행중'; // 0: 진행중
+                    case 1:
+                        return '승인';   // 1: 승인
+                    case -1:
+                        return '반려';   // -1: 반려
+                    default:
+                        return '없음'; // null 또는 정의되지 않은 값
+                }
+            }
             // AJAX 요청
             $.ajax({
                 url: '/Attendance/attendanceData', // 요청 URL
@@ -363,7 +376,7 @@
                             	    "<td>" + (attendance.new_workingoutside_time || "-") + "</td>" +
                             	    "<td>" + (attendance.modified_time || "-") + "</td>" +
                             	    "<td>" + (attendance.created_at || "-") + "</td>" +
-                            	    "<td>" + (attendance.status || "-") + "</td>" +
+                            	    "<td>" + getAttendanceStatusDisplay(attendance.status) + "</td>" + // status를 변환하여 표시
                             	    "<td>" + (attendance.overtime || "-") + "</td>" +
                             	    "<td>" + (attendance.businessDate || "-") + "</td>" +
                             	    "<td>" + (attendance.business_endDate || "-") + "</td>" +

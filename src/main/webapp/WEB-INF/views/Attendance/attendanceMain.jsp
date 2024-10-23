@@ -176,7 +176,7 @@
                     <div class="form-group">
                         <label for="status">상태</label>
                         <select class="form-control" id="status" name="status" required>
-                            <option>진행 중</option>
+                            <option value="0">진행 중</option>
                         </select>
                     </div>
 
@@ -322,11 +322,15 @@ function closeAttendanceModal() {
     $('#attendanceModal').modal('hide'); // 모달 닫기
 }
 
+
+
 // AJAX 요청을 통해 근태 신청 현황을 가져오는 함수
 function openAttendanceModal() {
     const empId = '<%= session.getAttribute("emp_id") %>'; // 세션에서 emp_id 가져오기
     console.log("empId:", empId); // empId 값 확인
 
+    
+    
     // AJAX 요청
     $.ajax({
         type: "GET",
@@ -342,6 +346,21 @@ function openAttendanceModal() {
             $('#attendanceInfoTableBody').html("<tr><td colspan='14'>근태 신청 현황을 불러오는 데 실패했습니다.</td></tr>");
         }
     });
+}
+
+
+//상태를 문자열로 변환하는 함수
+function getAttendanceStatusDisplay(status) {
+    switch (status) {
+        case 0:
+            return '진행중'; // 0: 진행중
+        case 1:
+            return '승인';   // 1: 승인
+        case -1:
+            return '반려';   // -1: 반려
+        default:
+            return '없음'; // null 또는 정의되지 않은 값
+    }
 }
 
 // 근태 정보를 화면에 표시하는 함수
@@ -368,7 +387,7 @@ function displayAttendanceInfo(data) {
             "<td>" + (attendance.business_endDate || "-") + "</td>" +
             "<td>" + (attendance.educationDate || "-") + "</td>" +
             "<td>" + (attendance.education_endDate || "-") + "</td>" +
-            "<td>" + (attendance.status || "-") + "</td>" +
+            "<td>" + getAttendanceStatusDisplay(attendance.status) + "</td>" + // 상태를 변환하여 표시
         "</tr>"; // 행을 닫음
     });
 }
@@ -445,7 +464,7 @@ function displayAttendanceInfo(data) {
                     <div class="form-group">
                         <label for="status">상태</label>
                         <select class="form-control" id="status" name="status" required>
-                            <option>진행 중</option>
+                            <option value="0">진행 중</option>
                         </select>
                     </div>
                 </form>
@@ -612,7 +631,7 @@ function submitAttendanceForm2() {
                     <div class="form-group">
                         <label for="status">상태</label>
                         <select class="form-control" id="status" name="status" required>
-                            <option value="진행 중">진행 중</option>
+                            <option value="0">진행 중</option>
                         </select>
                     </div>
                 </form>

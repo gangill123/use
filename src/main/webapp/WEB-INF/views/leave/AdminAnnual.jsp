@@ -64,45 +64,54 @@
                   <div class="card-header">
                     <div class="card-title">연차관리</div>
                
-               
+               <br>
+               <br>
 
 
-<div class="card-body">
-    <div class="table-responsive">
-        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-            <div class="d-flex align-items-center">
-                <label class="me-2">사원 ID:</label>
-                <input type="text" class="form-control me-2" id="emp_id_to_view" placeholder="사원 ID를 입력하세요" required style="width: 200px;">
-                
-                <button id="viewLeaveButton" class="btn btn-info">사원 연차 조회</button>
-            </div>
-            <br>
-            <br>
 
-            <!-- 연차 정보를 표시할 테이블 -->
-            <div id="annualLeaveData">
-                <table id="annualLeaveTable" class="table mt-3" style="display:none;">
-                    <thead>
-                        <tr>
-                            <th>입사일</th>                <!-- 사원의 입사일 -->
-                            <th>사원 ID</th>               <!-- 연차 테이블의 사원 번호 -->
-                            <th>총 연차 일수</th>
-                            <th>사용된 연차 일수</th>
-                            <th>남은 연차 일수</th>
-                            <th>연차 부여</th>
-                            <th>조정일</th>                <!-- 조정일 추가 -->
-                            <th>연차 생성</th>             <!-- 연차 생성 버튼 열 추가 -->
-                        </tr>
-                    </thead>
-                    <tbody id="annualLeaveList">
-                        <!-- 조회된 연차 데이터가 여기에 삽입됩니다 -->
-                    </tbody>
-                </table>
+
+
+
+
+
+
+  <div class="card-body">
+        <div class="table-responsive">
+            <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                <div class="d-flex align-items-center">
+                    <label class="me-2">사원 ID:</label>
+                    <input type="text" class="form-control me-2" id="emp_id_to_view" placeholder="사원 ID를 입력하세요" required style="width: 200px;">
+                    
+                    <button id="viewLeaveButton" class="btn btn-info">사원 연차 조회</button>
+                </div>
+                <br>
+                <br>
+
+                <!-- 연차 정보를 표시할 테이블 -->
+                <div id="annualLeaveData">
+                    <table id="annualLeaveTable" class="display table mt-3" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>입사일</th>                <!-- 사원의 입사일 -->
+                                <th>사원 ID</th>               <!-- 연차 테이블의 사원 번호 -->
+                                <th>총 연차 일수</th>
+                                <th>사용된 연차 일수</th>
+                                <th>남은 연차 일수</th>
+                                <th>연차 부여</th>
+                                <th>조정일</th>                <!-- 조정일 추가 -->
+                                <th>연차 생성</th>             <!-- 연차 생성 버튼 열 추가 -->
+                            </tr>
+                        </thead>
+                        <tbody id="annualLeaveList">
+                            <!-- 조회된 연차 데이터가 여기에 삽입됩니다 -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
+    
+    
 <script>
     $(document).ready(function() {
         $('#viewLeaveButton').click(function() {

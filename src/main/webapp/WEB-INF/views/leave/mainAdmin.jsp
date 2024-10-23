@@ -120,7 +120,7 @@
                         
  <div class="d-flex align-items-center">
   
-			<label class="me-2">사원 ID:</label>
+			<label class="me-2">사원 ID: </label>
 			<input type="text" class="form-control me-2" id="emp_id" placeholder="사원 ID를 입력하세요" required style="width: 200px;">
 			
 			<label class="me-2">휴가 시작 날짜별(선택):</label>
@@ -316,9 +316,9 @@
                         <div class="form-group">
                         <label for="modalLeaveStatusInput">상태</label>
                         <select class="form-control" id="modalLeaveStatusInput" name="status">
-                            <option value="승인">승인</option>
-                            <option value="반려">반려</option>
-                            <option value="진행중">진행중</option>
+                            <option value="1">승인</option>
+                            <option value="0">진행중</option>
+                            <option value="-1">반려</option>
                         </select>
                     </div>
                     
@@ -356,6 +356,20 @@ $(document).ready(function() {
     console.log("휴가 시작 날짜:", leaveStartDate);
     console.log("연차 시작 날짜:", annualLeaveStartDate);
     
+ // 상태를 문자열로 변환하는 함수
+    function getLeaveStatusDisplay(status) {
+        switch (status) {
+            case 0:
+                return '진행중';
+            case 1:
+                return '승인';
+            case -1:
+                return '반려';
+            default:
+                return '없음'; // null 또는 다른 값의 경우
+        }
+    }
+    
     // AJAX 요청
     $.ajax({
         url: 'leaveSelect', // 요청 URL
@@ -368,7 +382,7 @@ $(document).ready(function() {
         success: function(response) {
             var leaves = response; // 조회된 데이터
             $("#checkLeaveList").empty(); // 기존 데이터 초기화
-
+			
             // 조회된 데이터를 테이블에 추가
             if (leaves.length > 0) {
                 $.each(leaves, function(index, leave) {
@@ -388,7 +402,7 @@ $(document).ready(function() {
                         "<td>" + (leave.total_annual_leave || "-") + "</td>" +
                         "<td>" + (leave.used_annual_leave || "-") + "</td>" +
                         "<td>" + (leave.remaining_annual_leave || "-") + "</td>" +
-                        "<td>" + (leave.leave_status || "-") + "</td>" +
+                        "<td>" + getLeaveStatusDisplay(leave.leave_status) + "</td>" + // leave_status를 변환하여 표시
                         "<td>" + (leave.reason || "-") + "</td>" +
                         "<td>" + (leave.requested_at || "-") + "</td>" +
                         "<td>" + (leave.approval_date || "-") + "</td>" +

@@ -31,7 +31,7 @@ public class AttendanceVO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp return_time; // 복귀시간
     
-    private String status; // 결재 상태
+    private int status; // 결재 상태
     
     private int overtime; // 초과 시간
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

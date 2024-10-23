@@ -44,7 +44,7 @@ public class LeaveVO {
     private int adjustment; // 연차 조정
   
     // 휴가 상태 
-    private String leave_status; 
+    private int leave_status; 
     
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date adjustmentDate; // 연차 조정,사용,부여,소멸 시  날짜 디폴트로 입력되야됨
