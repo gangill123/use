@@ -114,7 +114,7 @@
 <%
     // 현재 날짜와 시간을 yyyy-MM-dd HH:mm:ss 형식으로 포맷
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    String createdAt = sdf.format(new Date());
+    String requestedAt = sdf.format(new Date());
 %>
 
 <button class="btn1 btn-primary" onclick="openLeaveModal()">
@@ -191,13 +191,13 @@
                 </select>
             </div>
             
-               <div>
-				    <label for="created_at">신청 날짜 및 시간:</label>
-						    <input
-						        type="text" class="form-control" id="created_at"
-						        name="created_at" placeholder="yyyy-MM-dd HH:mm:ss"
-						        value="<%=createdAt %>" required readonly>
-					</div>
+             <div>
+    <label for="requested_at">신청 날짜 및 시간:</label>
+    <input
+        type="text" class="form-control" id="requested_at"
+        name="requested_at" placeholder="yyyy-MM-dd HH:mm:ss"
+        value="<%= requestedAt %>" required readonly>
+</div>
             
             <div class="form-group">
                 <label for="reason">신청 사유:</label>
@@ -234,7 +234,7 @@ document.getElementById("usedLeave").addEventListener("input", function() {
     document.getElementById("adjustment").value = adjustedLeave; // 조정 연차 업데이트
 });
 
-// 연차 신청서 제출 함수.
+// 연차 신청서 제출 함수
 function submitLeaveForm() {
     // 입력된 값 가져오기
     const empId = document.getElementById("empId").value;
@@ -360,13 +360,13 @@ function submitLeaveForm() {
                         </select>
                     </div>
                     
-                       <div>
-				    <label for="created_at">신청 날짜 및 시간:</label>
-						    <input
-						        type="text" class="form-control" id="created_at"
-						        name="created_at" placeholder="yyyy-MM-dd HH:mm:ss"
-						        value="<%=createdAt %>" required readonly>
-					</div>
+                              <div>
+				    <label for="requested_at">신청 날짜 및 시간:</label>
+				    <input
+				        type="text" class="form-control" id="requested_at"
+				        name="requested_at" placeholder="yyyy-MM-dd HH:mm:ss"
+				        value="<%= requestedAt %>" required readonly>
+				</div>
                     
                     <div class="form-group">
                         <label for="reason">신청 사유</label>
@@ -530,12 +530,12 @@ document.getElementById("end_leave_date").addEventListener("change", calculateTo
                     </div>
                     
                       <div>
-				    <label for="created_at">신청 날짜 및 시간:</label>
-						    <input
-						        type="text" class="form-control" id="created_at"
-						        name="created_at" placeholder="yyyy-MM-dd HH:mm:ss"
-						        value="<%=createdAt %>" required readonly>
-					</div>
+				   	    <label for="requested_at">신청 날짜 및 시간:</label>
+				    <input
+				        type="text" class="form-control" id="requested_at"
+				        name="requested_at" placeholder="yyyy-MM-dd HH:mm:ss"
+				        value="<%= requestedAt %>" required readonly>
+				</div>
                     
                     <div class="form-group">
                         <label for="reason_leave">신청 사유</label>
@@ -693,67 +693,67 @@ document.getElementById("end_leave_date").addEventListener("change", calculateTo
 function closeLeaveStatusModal() {
     $('#leaveStatusModal').modal('hide');
 }
-
-// 나의 휴가 현황 모달 열기 함수
-function openLeaveStatusModal() {
-    const empId = '<%= empId %>'; // 세션에서 emp_id 가져오기
-    $('#leaveStatusModal').modal('show');
-    
-    // 휴가 현황을 조회하는 AJAX 요청
-    $.ajax({
-        type: "GET",
-        url: "getLeaveStatus", // 서버의 엔드포인트 설정
-        data: { emp_id: empId },
-        success: function(response) {
-            // 요청이 성공했을 때 데이터를 화면에 출력
-            displayLeaveInfo(response);
-        },
-        error: function(xhr, status, error) {
-            console.error("휴가 현황 조회 실패:", error);
-            $('#leaveInfoTableBody').html("<tr><td colspan='11'>휴가 현황을 불러오는 데 실패했습니다.</td></tr>");
-        }
-    });
+function getAttendanceStatusDisplay(leave_status) {
+    switch (leave_status) { // 매개변수 이름을 leave_status로 변경
+        case 0:
+            return '진행중'; // 0: 진행중
+        case 1:
+            return '승인';   // 1: 승인
+        case -1:
+            return '반려';   // -1: 반려
+        default:
+            return '없음'; // null 또는 정의되지 않은 값
+    }
 }
 
-// 휴가 정보를 화면에 표시하는 함수
-function displayLeaveInfo(data) {
-    const leaveInfoTableBody = document.getElementById("leaveInfoTableBody");
-    leaveInfoTableBody.innerHTML = ""; // 기존 데이터 초기화
-    
-    // 테이블에 한 행 추가
-    data.forEach(leave => {
-        // leave_status 값을 문자열로 변환
-        let leaveStatus;
-        switch (leave.leave_status) {
-            case 0:
-                leaveStatus = "진행중";
-                break;
-            case 1:
-                leaveStatus = "승인";
-                break;
-            case -1:
-                leaveStatus = "반려";
-                break;
-            default:
-                leaveStatus = "없음"; // 예상치 못한 값에 대한 처리
-        }
 
-        leaveInfoTableBody.innerHTML +=
-            "<tr>" + // 각 leave 정보를 새로운 행으로 시작
-            "<td>" + (leave.emp_id || "-") + "</td>" +  // emp_id가 null일 경우 "없음" 표시
-            "<td>" + (leave.total_annual_leave || "-") + "</td>" +  // total_annual_leave가 null일 경우 "없음" 표시
-            "<td>" + (leave.used_annual_leave || "-") + "</td>" +  // used_annual_leave가 null일 경우 "없음" 표시
-            "<td>" + (leave.remaining_annual_leave || "-") + "</td>" +  // remaining_annual_leave가 null일 경우 "없음" 표시
-            "<td>" + (leave.total_leave_days || "-") + "</td>" +  // total_leave_days가 null일 경우 "없음" 표시
-            "<td>" + (leave.used_leave || "-") + "</td>" +  // used_leave가 null일 경우 "없음" 표시
-            "<td>" + (leave.remaining_leave || "-") + "</td>" +  // remaining_leave가 null일 경우 "없음" 표시
-            "<td>" + (leave.leave_type || "-") + "</td>" +  // leave_type가 null일 경우 "없음" 표시
-            "<td>" + (leave.leave_start_date || "-") + "</td>" +  // leave_start_date가 null일 경우 "없음" 표시
-            "<td>" + (leave.end_leave_date || "-") + "</td>" +  // end_leave_date가 null일 경우 "없음" 표시
-            "<td>" + leaveStatus + "</td>" +  // 변환된 leaveStatus 추가
+    // 나의 휴가 현황 모달 열기 함수
+    function openLeaveStatusModal() {
+        const empId = '<%= empId %>'; // 세션에서 emp_id 가져오기
+        $('#leaveStatusModal').modal('show');
+        
+        // 휴가 현황을 조회하는 AJAX 요청
+        $.ajax({
+            type: "GET",
+            url: "getLeaveStatus", // 서버의 엔드포인트 설정
+            data: { emp_id: empId },
+            success: function(response) {
+                // 요청이 성공했을 때 데이터를 화면에 출력
+                displayLeaveInfo(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("휴가 현황 조회 실패:", error);
+                $('#leaveInfoTableBody').html("<tr><td colspan='11'>휴가 현황을 불러오는 데 실패했습니다.</td></tr>");
+            }
+        });
+    }
+
+    // 휴가 정보를 화면에 표시하는 함수
+    function displayLeaveInfo(data) {
+        const leaveInfoTableBody = document.getElementById("leaveInfoTableBody");
+        leaveInfoTableBody.innerHTML = ""; // 기존 데이터 초기화
+        
+        
+        
+        
+        // 테이블에 한 행 추가
+        data.forEach(leave => {
+            leaveInfoTableBody.innerHTML +=
+            	"<tr>" + // 각 leave 정보를 새로운 행으로 시작
+                "<td>" + (leave.emp_id || "-") + "</td>" +  // emp_id가 null일 경우 "없음" 표시
+                "<td>" + (leave.total_annual_leave || "-") + "</td>" +  // total_annual_leave가 null일 경우 "없음" 표시
+                "<td>" + (leave.used_annual_leave || "-") + "</td>" +  // used_annual_leave가 null일 경우 "없음" 표시
+                "<td>" + (leave.remaining_annual_leave || "-") + "</td>" +  // remaining_annual_leave가 null일 경우 "없음" 표시
+                "<td>" + (leave.total_leave_days || "-") + "</td>" +  // total_leave_days가 null일 경우 "없음" 표시
+                "<td>" + (leave.used_leave || "-") + "</td>" +  // used_leave가 null일 경우 "없음" 표시
+                "<td>" + (leave.remaining_leave || "-") + "</td>" +  // remaining_leave가 null일 경우 "없음" 표시
+                "<td>" + (leave.leave_type || "-") + "</td>" +  // leave_type가 null일 경우 "없음" 표시
+                "<td>" + (leave.leave_start_date || "-") + "</td>" +  // leave_start_date가 null일 경우 "없음" 표시
+                "<td>" + (leave.end_leave_date || "-") + "</td>" +  // end_leave_date가 null일 경우 "없음" 표시
+                "<td>" + (getAttendanceStatusDisplay(leave.leave_status) || "-") + "</td>" + // leave_status에 따른 상태 표시
             "</tr>"; // 행을 닫음
-    });
-}
+        });
+    }
 </script>
 
 
