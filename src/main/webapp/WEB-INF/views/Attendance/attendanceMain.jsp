@@ -491,6 +491,7 @@ $(document).ready(function() {
 
 
 
+
 function submitAttendanceForm2() {
     // 필드 값 초기화 및 명확한 변수명 사용
     const attendanceId = $('#attendance_idA').val(); // 사용자가 입력한 근태 번호
@@ -909,55 +910,55 @@ function recordReturnTime() {
     <!--// 출근 시간 문자열을 Date 객체로 변환
                       var checkInTime = new Date(attendance.check_in);
                       // 한국 시간 (UTC+9)으로 변환   -->
-      <script>
-      
-      $(document).ready(function() {
-          // 페이지가 로드될 때 출근 기록을 가져오는 AJAX 요청
-          $.ajax({
-              url: "fetchAttendanceRecords", // 컨트롤러의 메서드 URL
-              type: "GET",
-              success: function(attendanceList) {
-                  // 테이블에 출근 기록 추가
-                  var tableBody = $("#attendanceTable tbody");
-                  tableBody.empty(); // 기존 데이터 지우기
-                  attendanceList.forEach(function(attendance) {
-                      // 출근 시간 문자열을 Date 객체로 변환
-                      var checkInTime = new Date(attendance.check_in);
-                      // 한국 시간 (UTC+9)으로 변환
-                      checkInTime.setHours(checkInTime.getHours() + 9);
+     <script>
+$(document).ready(function() {
+    // 페이지가 로드될 때 출근 기록을 가져오는 AJAX 요청
+    $.ajax({
+        url: "fetchAttendanceRecords", // 컨트롤러의 메서드 URL
+        type: "GET",
+        success: function(attendanceList) {
+            // 테이블에 출근 기록 추가
+            var tableBody = $("#attendanceTable tbody");
+            tableBody.empty(); // 기존 데이터 지우기
+            attendanceList.forEach(function(attendance) {
+                // 출근 시간 문자열을 Date 객체로 변환
+                var checkInTime = new Date(attendance.check_in);
+                // 한국 시간 (UTC+9)으로 변환
+                checkInTime.setHours(checkInTime.getHours() + 9);
 
-                      var checkOutTime = attendance.check_out ? new Date(attendance.check_out) : null; // 퇴근 시간이 있을 경우만 변환
-                      if (checkOutTime) {
-                          checkOutTime.setHours(checkOutTime.getHours() + 9);
-                      }
+                var checkOutTime = attendance.check_out ? new Date(attendance.check_out) : null; // 퇴근 시간이 있을 경우만 변환
+                if (checkOutTime) {
+                    checkOutTime.setHours(checkOutTime.getHours() + 9);
+                }
 
-                      var workStatus = determineWorkStatus(checkInTime, checkOutTime); // 근무 상태 결정
-                      
-                      
-                      
-                      
+                var workStatus = determineWorkStatus(checkInTime, checkOutTime); // 근무 상태 결정
 
-                      tableBody.append(
-                          "<tr>" +
-                          "<td>" + checkInTime.toLocaleString() + "</td>" + // 로컬 시간 형식으로 표시
-                          "<td>" + (checkOutTime ? checkOutTime.toLocaleString() : '퇴근하지 않음') + "</td>" + // 퇴근 시간 표시
-                          "<td>" + workStatus + "</td>" + // 근무 상태 표시
-                          "</tr>"
-                      );
-                  });
-              },
-              error: function() {
-                  alert("출근 기록을 가져오는 데 실패했습니다.");
-              }
-          });
-      });
-      function determineWorkStatus(checkInTime, checkOutTime) {
-    	   
+                tableBody.append(
+                    "<tr>" +
+                    "<td>" + checkInTime.toLocaleString() + "</td>" + // 로컬 시간 형식으로 표시
+                    "<td>" + (checkOutTime ? checkOutTime.toLocaleString() : '퇴근하지 않음') + "</td>" + // 퇴근 시간 표시
+                    "<td>" + workStatus + "</td>" + // 근무 상태 표시
+                    "</tr>"
+                );
+            });
+        },
+        error: function() {
+            alert("출근 기록을 가져오는 데 실패했습니다.");
+        }
+    });
+});
 
-    	    
-    	        return "정상 출근"; // 오전 9시 이전 출근
-    	    
-    	}
+function determineWorkStatus(checkInTime, checkOutTime) {
+    // 오전 9시를 기준으로 출근 시간을 확인
+    const nineAM = new Date(checkInTime);
+    nineAM.setHours(9, 0, 0, 0); // 오전 9시로 설정
+
+    if (checkInTime < nineAM) {
+        return "정상 출근"; // 오전 9시 이전 출근
+    } else {
+        return "지각"; // 오전 9시 이후 출근
+    }
+}
 </script>
     
     
@@ -1046,7 +1047,7 @@ function recordReturnTime() {
                     type: 'GET',
                     success: function(response) {
                         if (response.status === 'success') {
-                            alert('퇴근 처리가 완료되었습니다.');
+                           
                             $('#checkoutTimeDisplay').text('퇴근 시간: ' + response.checkOutTime);
                         } else {
                             alert(response.message);
